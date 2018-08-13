@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:replace="fragments/general.html :: homeHeaderfiles">
+
+</head>
+
+
+<body class="grey">
+
+<nav th:replace="fragments/general.html :: homeNavbar"></nav>
+
+<div id="login-page">
+    <div class="container" style="margin-top: 2rem">
+        <div class="row">
+            <div class="col m3"></div>
+            <div class="row col s12 m6 z-depth-4 card-panel">
+
+                <form class="login-form" th:action="@{/login}" method="post">
+                    <div th:if="${param.error}">
+                        <div class="alert alert-danger">
+                            Invalid username and password.
+                            <span th:text="${param.error}"></span>
+                        </div>
+                    </div>
+                    <div th:if="${param.logout}">
+                        <div class="alert alert-info">
+                            You have been logged out.
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12 center">
+                            <p class="center login-form-text">PLEASE ENTER YOUR CREDENTIALS</p>
+                        </div>
+                    </div>
+                    <div class="row margin">
+                        <div class="input-field col s12">
+                            <input id="username" name="username" th:type="text">
+                            <label for="username" class="center-align">Username</label>
+                        </div>
+                    </div>
+                    <div class="row margin">
+                        <div class="input-field col s12">
+                            <input id="password" name="password" th:type="password">
+                            <label for="password">Password</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <button class="btn waves-effect waves-light col s12" type="submit" name="login">
+                                <i class="material-icons right" th:text="#{login.button}">Login</i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6 m6 l6">
+                            <p class="margin medium-small"><a th:href="@{/public/signup}">Register Now!</a></p>
+                        </div>
+                        <!--<div class="col s6 m6 l6">
+                            <p class="margin right-align medium-small"><a th:href="@{/forgot}">Forgot
+                                password ?</a></p>
+                        </div>-->
+                    </div>
+
+                </form>
+            </div>
+            <div class="col m3"></div>
+        </div>
+    </div>
+</div>
+
+
+<span th:replace="fragments/general.html :: scripts"/>
+</body>
+
+
+</html>

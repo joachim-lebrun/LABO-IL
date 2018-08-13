@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: homeHeaderfiles">
+
+</head>
+<body>
+<nav th:replace="fragments/general.html :: homeNavbar"></nav>
+<div class="container">
+    <div class="row">
+        <div th:replace="fragments/form/addCitizen.html :: form"/>
+    </div>
+</div>
+<span th:replace="fragments/general.html :: scripts"/>
+</body>
+</html>

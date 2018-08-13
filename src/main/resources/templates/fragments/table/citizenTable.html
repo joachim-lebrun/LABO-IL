@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<div class="row" th:fragment="table">
+    <table class="striped">
+        <thead>
+        <tr>
+            <th th:text="#{home.mainTable.firstName}">First Name</th>
+            <th th:text="#{home.mainTable.lastName}">Last Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="citizen : ${citizens}">
+            <td th:text="${citizen.firstName}"></td>
+            <td th:text="${citizen.lastName}"></td>
+            <td th:text="${citizen.userID}"></td>
+            <td><a th:href="@{/user/{id}(id=${citizen.userID})}" th:text="#{home.mainTable.detail}"></a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</html>

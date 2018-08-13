@@ -1,0 +1,107 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+
+<head th:fragment="homeHeaderfiles">
+    <meta charset="UTF-8"/>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{css/materialize.css}">
+    <!--Import Google Icon Font-->
+    <link rel="stylesheet" type="text/css" th:href="@{css/home.css}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+</head>
+<head th:fragment="appHeaderfiles">
+    <meta charset="UTF-8"/>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" type="text/css" href="../../static/css/materialize.css" th:href="@{css/materialize.css}">
+    <!--Import Google Icon Font-->
+    <link rel="stylesheet" type="text/css" href="../../static/css/app.css" th:href="@{css/app.css}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+</head>
+
+<div th:fragment="navbar">
+
+    <!-- Dropdown Structure -->
+    <ul id="dropdown1" class="dropdown-content">
+        <li><a href="?lang=fr">French</a></li>
+        <li class="divider"></li>
+        <li><a href="?lang=en_US">English</a></li>
+    </ul>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li><a th:href="@{/login}">Login</a></li>
+                <li><a th:href="@{/public/signup}">Sign up</a></li>
+                <!-- Dropdown Trigger -->
+                <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Language<i
+                        class="material-icons right">arrow_drop_down</i></a></li>
+            </ul>
+        </div>
+    </nav>
+    <ul id="slide-out" class="sidenav sidenav-fixed">
+        <li>
+            <div class="user-view">
+                <div class="background">
+                    <img src="images/office.jpg">
+                </div>
+                <a href="#user"><img class="circle" src="images/yuna.jpg"></a>
+                <a href="#name"><span class="white-text name">John Doe</span></a>
+                <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
+            </div>
+        </li>
+        <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li>
+        <li><a href="#!">Second Link</a></li>
+        <li>
+            <div class="divider"></div>
+        </li>
+        <li><a class="subheader">Subheader</a></li>
+        <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+    </ul>
+
+</div>
+<div th:fragment="homeNavbar">
+
+    <!-- Dropdown Structure -->
+    <ul id="dropdown2" class="dropdown-content">
+        <li><a href="?lang=fr">French</a></li>
+        <li class="divider"></li>
+        <li><a href="?lang=en_US">English</a></li>
+    </ul>
+    <nav>
+        <div class="nav-wrapper">
+
+            <ul class="right hide-on-med-and-down">
+                <li><a th:href="@{/login}">Login</a></li>
+                <li><a th:href="@{/signup}">Sign up</a></li>
+                <!-- Dropdown Trigger -->
+                <li><a class="dropdown-trigger" href="#!" data-target="dropdown2">Language<i
+                        class="material-icons right">arrow_drop_down</i></a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+
+<div th:fragment="scripts">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../../static/js/materialize.min.js" th:src="@{js/materialize.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/general.js" th:src="@{js/general.js}"></script>
+
+</div>
+
+
+<footer th:fragment="footer">
+    <div sec:authorize="isAuthenticated()">
+        Logged user: <span sec:authentication="name"></span> |
+        Roles: <span sec:authentication="principal.authorities"></span> |
+        <a th:href="@{/logout}">Sign Out</a>
+    </div>
+</footer>
+</html>

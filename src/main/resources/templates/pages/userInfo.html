@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+
+    <title>laboil</title>
+</head>
+<body>
+<h1>Test User from DB</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th th:text="#{userInfo.mainTable.firstName}">First Name</th>
+        <th th:text="#{userInfo.mainTable.lastName}">Last Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${citizen.firstName}">13/01/2011</td>
+        <td th:text="${citizen.lastName}">yes</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
