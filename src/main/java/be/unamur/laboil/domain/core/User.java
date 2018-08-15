@@ -23,6 +23,4 @@ public abstract class User {
     private String password;
     private boolean enabled;
     private String natReg;
-    private Gender gender;
-    private String birthPlace;
 }

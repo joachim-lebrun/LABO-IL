@@ -2,9 +2,9 @@ package be.unamur.laboil.service;
 
 import be.unamur.laboil.component.Encryptor;
 import be.unamur.laboil.domain.core.Citizen;
-import be.unamur.laboil.domain.core.Gender;
 import be.unamur.laboil.domain.core.Town;
 import be.unamur.laboil.domain.persistance.CitizenDAO;
+import be.unamur.laboil.utilities.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -39,38 +41,49 @@ public class CitizenService {
 
 
     public Citizen findById(String userId) {
-        CitizenDAO dao = jdbcTemplate.queryForObject("SELECT * FROM CITIZEN where USER_ID = ?",
-                new Object[]{userId}, (resultSet, i) -> CitizenDAO.builder()
-                        .firstName(resultSet.getString("FIRST_NAME"))
-                        .lastName(resultSet.getString("LAST_NAME"))
-                        .address(resultSet.getString("ADDRESS"))
-                        .town(resultSet.getString("TOWN"))
-                        .phoneNumber(resultSet.getString("PHONE_NUMBER"))
-                        .birthDate(resultSet.getString("BIRTH_DATE"))
-                        .email(resultSet.getString("EMAIL"))
-                        .gender(resultSet.getString("GENDER"))
-                        .birthPlace(resultSet.getString("BIRTH_PLACE"))
-                        .userID(resultSet.getString("USER_ID"))
-                        .natReg(resultSet.getString("REG_NAT"))
-                        .build());
+        CitizenDAO dao = jdbcTemplate.queryForObject("SELECT c.*,u.* FROM CITIZEN c JOIN USER u on u.USER_ID=c.USER_ID where USER_ID = ?",
+                new Object[]{userId}, (resultSet, i) -> extractFromRS(resultSet));
 
+        return buildFromDAO(dao);
+    }
+
+    private Citizen buildFromDAO(CitizenDAO dao) {
         return Citizen.builder()
                 .firstName(dao.getFirstName())
                 .lastName(dao.getLastName())
                 .address(dao.getAddress())
                 .town(townService.findById(dao.getTown()))
                 .phoneNumber(dao.getPhoneNumber())
-                .birthDate(LocalDate.parse(encryptor.decrypt(dao.getBirthDate())))
+                .birthDate(LocalDate.parse(encryptor.decrypt(dao.getBirthDate()), Constants.SQL_FORMATTER))
                 .email(dao.getEmail())
-                .gender(Gender.fromAbbr(dao.getGender()))
-                .birthPlace(dao.getBirthPlace())
                 .natReg(encryptor.decrypt(dao.getNatReg()))
+                .citizenID(dao.getCitizenID())
                 .userID(dao.getUserID()).build();
     }
 
+    public Citizen findByEmail(String email) {
+        CitizenDAO dao = jdbcTemplate.queryForObject("SELECT c.*,u.* FROM CITIZEN c JOIN USER u on u.USER_ID=c.USER_ID where EMAIL = ?",
+                new Object[]{email}, (resultSet, i) -> extractFromRS(resultSet));
+        return buildFromDAO(dao);
+    }
+
+    private CitizenDAO extractFromRS(ResultSet resultSet) throws SQLException {
+        return CitizenDAO.builder()
+                .firstName(resultSet.getString("FIRST_NAME"))
+                .lastName(resultSet.getString("LAST_NAME"))
+                .address(resultSet.getString("ADDRESS"))
+                .town(resultSet.getString("TOWN"))
+                .phoneNumber(resultSet.getString("PHONE_NUMBER"))
+                .birthDate(resultSet.getString("BIRTH_DATE"))
+                .email(resultSet.getString("EMAIL"))
+                .userID(resultSet.getString("USER_ID"))
+                .natReg(resultSet.getString("REG_NAT"))
+                .citizenID(resultSet.getString("CITIZEN_ID"))
+                .build();
+    }
 
     public List<Citizen> getAllCitizens() {
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM CITIZEN");
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT c.*,u.* FROM CITIZEN JOIN USER u on u.USER_ID=c.USER_ID");
         return rows
                 .stream()
                 .map(row -> Citizen.builder()
@@ -79,10 +92,9 @@ public class CitizenService {
                         .address((String) row.get("ADDRESS"))
                         .town(townService.findById((String) row.get("TOWN")))
                         .phoneNumber((String) row.get("PHONE_NUMBER"))
+                        .citizenID((String) row.get("CITIZEN_ID"))
                         .birthDate(LocalDate.parse(encryptor.decrypt((String) row.get("BIRTH_DATE"))))
                         .email((String) row.get("EMAIL"))
-                        .gender(Gender.fromAbbr((String) row.get("GENDER")))
-                        .birthPlace((String) row.get("BIRTH_PLACE"))
                         .userID((String) row.get("USER_ID"))
                         .natReg(encryptor.decrypt((String) row.get("REG_NAT")))
                         .build())
@@ -92,36 +104,41 @@ public class CitizenService {
     public void insert(Citizen citizen) {
         Town town = townService.findByName(citizen.getTown().getName());
         CitizenDAO dao = CitizenDAO.builder()
+                .citizenID(UUID.randomUUID().toString())
                 .address(citizen.getAddress())
                 .birthDate(encryptor.encrypt(citizen.getBirthDate().format(DateTimeFormatter.BASIC_ISO_DATE)))
-                .birthPlace(citizen.getBirthPlace())
                 .email(citizen.getEmail())
                 .firstName(citizen.getFirstName())
-                .gender(citizen.getGender().getAbbr())
                 .town(town.getTownID())
                 .lastName(citizen.getLastName())
                 .natReg(encryptor.encrypt(citizen.getNatReg()))
                 .userID(UUID.randomUUID().toString())
                 .password(bCryptPasswordEncoder.encode(citizen.getPassword()))
                 .phoneNumber(citizen.getPhoneNumber()).build();
-        jdbcTemplate.update("INSERT INTO CITIZEN " +
-                        "(FIRST_NAME,LAST_NAME,ADDRESS,BIRTH_DATE,BIRTH_PLACE,EMAIL,GENDER,TOWN,USER_ID,PASSWORD,REG_NAT) " +
-                        "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+        jdbcTemplate.update("INSERT INTO USER " +
+                        "(USER_ID,FIRST_NAME,LAST_NAME,ADDRESS,PHONE_NUMBER,BIRTH_DATE,EMAIL,PASSWORD,REG_NAT,ENABLED) " +
+                        "VALUES (?,?,?,?,?,?,?,?,?,?)",
+                dao.getUserID(),
                 dao.getFirstName(),
                 dao.getLastName(),
                 dao.getAddress(),
+                dao.getPhoneNumber(),
                 dao.getBirthDate(),
-                dao.getBirthPlace(),
                 dao.getEmail(),
-                dao.getGender(),
-                dao.getTown(),
-                dao.getUserID(),
                 dao.getPassword(),
-                dao.getNatReg());
-        jdbcTemplate.update("INSERT INTO AUTHORITIES " +
-                        "(EMAIL,AUTHORITY) " +
+                dao.getNatReg(),
+                true);
+        jdbcTemplate.update("INSERT INTO ROLE " +
+                        "(EMAIL,RIGHTS) " +
                         "VALUES (?,?)",
                 dao.getEmail(), "CITIZEN");
+
+        jdbcTemplate.update("INSERT INTO CITIZEN " +
+                        "(CITIZEN_ID,USER_ID,TOWN) " +
+                        "VALUES (?,?,?)",
+                dao.getCitizenID(),
+                dao.getUserID(),
+                dao.getTown());
         LOGGER.debug("citizen {} has been added", dao.toString());
     }
 

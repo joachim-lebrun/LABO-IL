@@ -1,31 +1,30 @@
 package be.unamur.laboil.domain.core;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import java.io.File;
 
 /**
  * @author Joachim Lebrun on 06-08-18
  */
 @Data
 @EqualsAndHashCode
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Town {
 
     private String townID;
     private String name;
     private String language;
+    private String address;
+    private String email;
+    private String phoneNumber;
+    private File logo;
     private String country;
     private int postalCode;
-
-    public Town() {
-    }
-
-    @Builder
-    public Town(String townID, String name, String language, int postalCode, String country) {
-        this.townID = townID;
-        this.name = name;
-        this.language = language;
-        this.postalCode = postalCode;
-        this.country = country;
-    }
 }

@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -26,79 +26,54 @@ public class OfficialDocumentService {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private CitizenService citizenService;
-
-    @Autowired
-    private ServiceService serviceService;
-
-    @Autowired
-    private TownService townService;
-
-    @Autowired
     private DemandService demandService;
 
 
     public OfficialDocument findByID(String docID) {
         OfficialDocumentDAO dao = jdbcTemplate.queryForObject("SELECT * FROM OFFICIAL_DOC where DOCUMENT_ID = ?",
                 new Object[]{docID}, (resultSet, i) -> OfficialDocumentDAO.builder()
-                        .beneficiary(resultSet.getString("DOCUMENT_BENEFICIARY"))
-                        .creationDate(resultSet.getDate("DOCUMENT_DATE").toLocalDate())
-                        .expirationDate(resultSet.getDate("DOCUMENT_EXPIRY").toLocalDate())
                         .documentID(resultSet.getString("DOCUMENT_ID"))
-                        .issuerService(resultSet.getString("DOCUMENT_ISSUER_SERVICE"))
-                        .issuerTown(resultSet.getString("DOCUMENT_ISSUER_TOWN"))
-                        .tracking(resultSet.getString("DOCUMENT_TRACKING"))
+                        .demandID(resultSet.getString("DEMAND_ID"))
+                        .path(resultSet.getString("PATH"))
+                        .creationDate(resultSet.getDate("CREATION_DATE").toLocalDate())
                         .build());
 
-
         return OfficialDocument.builder()
-                .beneficiary(citizenService.findById(dao.getBeneficiary()))
-                .creationDate(dao.getCreationDate())
-                .expiration(dao.getExpirationDate())
                 .documentID(dao.getDocumentID())
-                .issuerService(serviceService.findById(dao.getIssuerService()))
-                .issuerTown(townService.findById(dao.getIssuerTown()))
-                .tracking(demandService.findByID(dao.getTracking()))
+                .creationDate(dao.getCreationDate())
+                .demand(demandService.findByID(dao.getDemandID()))
+                .pdf(Paths.get(dao.getPath()).toFile())
                 .build();
 
 
     }
 
 
-    public List<OfficialDocument> getAllOfficialDocuments() {
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM OFFICIAL_DOC");
-        return rows
-                .stream()
+    public List<OfficialDocument> getMyOfficialDocuments(String userID) {
+        return jdbcTemplate.queryForList("SELECT * FROM OFFICIAL_DOC o " +
+                "JOIN DEMAND d on d.DEMAND_ID = o.DEMAND_ID " +
+                "where d.CREATOR = ?", userID).stream()
                 .map(row -> OfficialDocument.builder()
-                        .beneficiary(citizenService.findById((String) row.get("DOCUMENT_BENEFICIARY")))
-                        .creationDate(LocalDate.parse((String) row.get("DOCUMENT_DATE")))
-                        .expiration(LocalDate.parse((String) row.get("DOCUMENT_EXPIRY")))
                         .documentID((String) row.get("DOCUMENT_ID"))
-                        .issuerService(serviceService.findById((String) row.get("DOCUMENT_ISSUER_SERVICE")))
-                        .issuerTown(townService.findById((String) row.get("DOCUMENT_ISSUER_TOWN")))
-                        .tracking(demandService.findByID((String) row.get("DOCUMENT_TRACKING")))
+                        .demand(demandService.findByID((String) row.get("DEMAND_ID")))
+                        .pdf(Paths.get((String) row.get("PATH")).toFile())
+                        .creationDate(LocalDate.parse((String) row.get("CREATION_DATE")))
                         .build())
                 .collect(Collectors.toList());
     }
 
     public void insert(OfficialDocument officialDocument) {
         OfficialDocumentDAO dao = OfficialDocumentDAO.builder()
-                .tracking(officialDocument.getTracking().getDemandID())
-                .issuerTown(officialDocument.getIssuerTown().getTownID())
-                .issuerService(officialDocument.getIssuerService().getServiceID())
                 .documentID(UUID.randomUUID().toString())
-                .expirationDate(officialDocument.getExpiration())
-                .creationDate(officialDocument.getCreationDate())
-                .beneficiary(officialDocument.getBeneficiary().getUserID())
+                .creationDate(LocalDate.now())
+                .path(officialDocument.getPdf().getAbsolutePath())
+                .demandID(officialDocument.getDemand().getDemandID())
                 .build();
-        jdbcTemplate.update("INSERT INTO OFFICIAL_DOC (DOCUMENT_BENEFICIARY,DOCUMENT_DATE,DOCUMENT_EXPIRY,DOCUMENT_ID,DOCUMENT_ISSUER_SERVICE,DOCUMENT_ISSUER_TOWN, DOCUMENT_TRACKING ) VALUES (?,?,?,?,?,?,?)",
-                dao.getBeneficiary(),
-                dao.getCreationDate(),
-                dao.getExpirationDate(),
+        jdbcTemplate.update("INSERT INTO OFFICIAL_DOC (DOCUMENT_ID,CREATION_DATE,PATH, DEMAND_ID ) VALUES (?,?,?,?)",
                 dao.getDocumentID(),
-                dao.getIssuerService(),
-                dao.getIssuerTown(),
-                dao.getTracking());
+                dao.getCreationDate(),
+                dao.getPath(),
+                dao.getDemandID());
         LOGGER.debug("officialDoc {} has been added", dao.toString());
     }
 

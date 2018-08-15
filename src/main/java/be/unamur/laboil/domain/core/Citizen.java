@@ -14,15 +14,17 @@ import java.time.LocalDate;
 public class Citizen extends User {
 
     private Town town;
+    private String citizenID;
 
     public Citizen() {
     }
 
     @Builder
 
-    public Citizen(String userID, String firstName, String lastName, String address, String phoneNumber, LocalDate birthDate, String email, String password, boolean enabled, String natReg, Gender gender, String birthPlace, Town town) {
-        super(userID, firstName, lastName, address, phoneNumber, birthDate, email, password, enabled, natReg, gender, birthPlace);
+    public Citizen(String userID, String firstName, String lastName, String address, String phoneNumber, LocalDate birthDate, String email, String password, boolean enabled, String natReg, Town town, String citizenID) {
+        super(userID, firstName, lastName, address, phoneNumber, birthDate, email, password, enabled, natReg);
         this.town = town;
+        this.citizenID = citizenID;
     }
 }
 

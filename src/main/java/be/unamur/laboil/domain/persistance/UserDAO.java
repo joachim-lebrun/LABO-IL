@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 /**
  * @author Joachim Lebrun on 06-08-18
  */
@@ -22,9 +20,7 @@ public abstract class UserDAO {
     private String email;
     private String password;
     private String natReg;
-    private String gender;
     private String phoneNumber;
-    private String birthPlace;
     private boolean enabled;
 
 }

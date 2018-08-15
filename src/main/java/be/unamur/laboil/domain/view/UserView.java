@@ -21,8 +21,6 @@ public abstract class UserView {
     private String phoneNumber;
     private String birthDate;
     private String email;
-    private String gender;
-    private String birthPlace;
     private String password;
     private boolean enabled;
     private String natReg;

@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * @author Joachim Lebrun on 06-08-18
@@ -15,14 +14,13 @@ import java.util.Date;
 public class Employee extends User {
 
     private Service service;
-    private String role;
+    private String empoyeeID;
 
     @Builder
-
-    public Employee(String userID, String firstName, String lastName, String address, String phoneNumber, LocalDate birthDate, String email, String password, boolean enabled, String natReg, Gender gender, String birthPlace, Service service, String role) {
-        super(userID, firstName, lastName, address, phoneNumber, birthDate, email, password, enabled, natReg, gender, birthPlace);
+    public Employee(String userID, String firstName, String lastName, String address, String phoneNumber, LocalDate birthDate, String email, String password, boolean enabled, String natReg, Service service, String empoyeeID) {
+        super(userID, firstName, lastName, address, phoneNumber, birthDate, email, password, enabled, natReg);
         this.service = service;
-        this.role = role;
+        this.empoyeeID = empoyeeID;
     }
 }
 

@@ -4,8 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 /**
  * @author Joachim Lebrun on 06-08-18
  */
@@ -21,8 +19,8 @@ public class CitizenView extends UserView {
 
     @Builder
 
-    public CitizenView(String userID, String firstName, String lastName, String address, String phoneNumber, String birthDate, String email, String gender, String birthPlace, String password, boolean enabled, String natReg, String town) {
-        super(userID, firstName, lastName, address, phoneNumber, birthDate, email, gender, birthPlace, password, enabled, natReg);
+    public CitizenView(String userID, String firstName, String lastName, String address, String phoneNumber, String birthDate, String email, String password, boolean enabled, String natReg, String town) {
+        super(userID, firstName, lastName, address, phoneNumber, birthDate, email, password, enabled, natReg);
         this.town = town;
     }
 }

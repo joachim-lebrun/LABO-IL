@@ -11,9 +11,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
-/**
- * @author Joachim Lebrun on 08-08-18
- */
+
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 @EnableWebMvc
 @ComponentScan("be.unamur.laboil")

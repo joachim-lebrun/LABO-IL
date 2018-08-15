@@ -1,11 +1,13 @@
 package be.unamur.laboil.domain.core;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+import java.io.File;
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * @author Joachim Lebrun on 06-08-18
@@ -13,29 +15,14 @@ import java.util.Date;
 
 @Data
 @EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class OfficialDocument {
 
     private LocalDate creationDate;
     private String documentID;
+    private Demand demand;
+    private File pdf;
 
-    private Citizen beneficiary;
-    private Service issuerService;
-    private Town issuerTown;
-    private Demand tracking;
-    private LocalDate expiration;
-
-    public OfficialDocument() {
-
-    }
-
-    @Builder
-    public OfficialDocument(LocalDate creationDate, String documentID, Citizen beneficiary, Service issuerService, Town issuerTown, Demand tracking, LocalDate expiration) {
-        this.creationDate = creationDate;
-        this.documentID = documentID;
-        this.beneficiary = beneficiary;
-        this.issuerService = issuerService;
-        this.issuerTown = issuerTown;
-        this.tracking = tracking;
-        this.expiration = expiration;
-    }
 }

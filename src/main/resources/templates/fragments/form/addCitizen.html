@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <div class="row">
-    <form th:fragment="form" class="col s12" action="#" th:action="@{/addCitizen}" th:object="${citizenView}"
+    <form th:fragment="form" class="col s12" action="#" th:action="@{/public/register}" th:object="${citizenView}"
           method="post">
 
         <div class="row">
@@ -39,11 +39,6 @@
                 <label th:text="#{home.form.password}" for="PassInput">password</label>
                 <input id="PassInput" type="password" th:field="*{password}" placeholder="password"/>
             </div>
-
-            <div class="col s4">
-                <label th:text="#{home.form.birthPlace}" for="BPInput">Birth Place</label>
-                <input id="BPInput" type="text" th:field="*{birthPlace}" placeholder="Birth Place"/>
-            </div>
             <div class="col s4">
                 <label th:text="#{home.form.natReg}" for="RNInput">Registre Nat</label>
                 <input id="RNInput" type="text" th:field="*{natReg}" placeholder="Registre Nat"/>
@@ -61,14 +56,6 @@
                     <option value="Bousval">Bousval</option>
                 </select>
                 <label>Select your town</label>
-            </div>
-            <div class="input-field col s4">
-                <select th:field="*{gender}">
-                    <option value="" disabled selected th:text="#{home.form.gender}">Gender</option>
-                    <option value="M">M</option>
-                    <option value="F">F</option>
-                </select>
-                <label>Gender</label>
             </div>
             <div class="col s4">
                 <button class="btn waves-effect waves-light" type="submit" name="register">

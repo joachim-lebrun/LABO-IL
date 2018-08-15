@@ -1,41 +1,21 @@
 package be.unamur.laboil.domain.view;
 
 
-
-import java.time.LocalDate;
-import java.util.Date;
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Joachim Lebrun on 06-08-18
  */
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class OfficialDocumentView {
 
-    private LocalDate documentDate;
+    private String createdDate;
     private String documentID;
-    private String documentBeneficiary;
-    private String documentIssuerService;
-    private String documentIssuerTown;
-    private String documentTracking;
-    private LocalDate documentExpiration;
 
-    public OfficialDocumentView(){
-
-    }
-
-    @Builder
-    public OfficialDocumentView(LocalDate documentDate, String documentID, String documentBeneficiary, String documentIssuerService, String documentIssuerTown, String documentTracking, LocalDate documentExpiration) {
-        this.documentDate = documentDate;
-        this.documentID = documentID;
-        this.documentBeneficiary = documentBeneficiary;
-        this.documentIssuerService = documentIssuerService;
-        this.documentIssuerTown = documentIssuerTown;
-        this.documentTracking = documentTracking;
-        this.documentExpiration = documentExpiration;
-    }
 }
