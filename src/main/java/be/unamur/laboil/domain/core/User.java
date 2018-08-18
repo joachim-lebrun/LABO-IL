@@ -23,4 +23,8 @@ public abstract class User {
     private String password;
     private boolean enabled;
     private String natReg;
+
+    public String getDisplayName() {
+        return String.format("%s %s", lastName, firstName);
+    }
 }

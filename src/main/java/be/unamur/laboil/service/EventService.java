@@ -3,6 +3,7 @@ package be.unamur.laboil.service;
 import be.unamur.laboil.domain.core.Event;
 import be.unamur.laboil.domain.core.EventStatus;
 import be.unamur.laboil.domain.persistance.EventDAO;
+import be.unamur.laboil.utilities.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class EventService {
                 .stream()
                 .map(row -> Event.builder()
                         .status(EventStatus.valueOf((String) row.get("STATUS")))
-                        .creationDate(LocalDate.parse((String) row.get("CREATION_DATE")))
+                        .creationDate(LocalDate.parse((String) row.get("CREATION_DATE"), Constants.SQL_FORMATTER))
                         .eventID((String) row.get("EVENT_ID"))
                         .build())
                 .collect(Collectors.toCollection(TreeSet::new));

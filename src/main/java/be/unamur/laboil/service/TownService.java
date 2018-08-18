@@ -22,6 +22,8 @@ public class TownService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private EmployeeService employeeService;
 
     public Town findById(String townID) {
         TownDAO dao = jdbcTemplate.queryForObject("SELECT * FROM TOWN where TOWN_ID = ?",
@@ -37,9 +39,10 @@ public class TownService {
                 .language(dao.getLanguage())
                 .postalCode(dao.getPostalCode())
                 .townID(dao.getTownID())
+                .mayor(employeeService.findMayor(dao.getMayorID()))
                 .address(dao.getAddress())
                 .country(dao.getCountry())
-                .email(dao.getEmail()   )
+                .email(dao.getEmail())
                 .logo(Paths.get(dao.getLogoPath()).toFile())
                 .phoneNumber(dao.getPhoneNumber())
                 .build();
@@ -54,6 +57,7 @@ public class TownService {
                 .address(resultSet.getString("ADDRESS"))
                 .country(resultSet.getString("COUNTRY"))
                 .email(resultSet.getString("EMAIL"))
+                .mayorID(resultSet.getString("MAYOR_ID"))
                 .logoPath(resultSet.getString("LOGO_PATH"))
                 .phoneNumber(resultSet.getString("PHONE_NUMBER"))
                 .build();

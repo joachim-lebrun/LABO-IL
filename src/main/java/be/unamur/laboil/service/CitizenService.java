@@ -41,7 +41,7 @@ public class CitizenService {
 
 
     public Citizen findById(String userId) {
-        CitizenDAO dao = jdbcTemplate.queryForObject("SELECT c.*,u.* FROM CITIZEN c JOIN USER u on u.USER_ID=c.USER_ID where USER_ID = ?",
+        CitizenDAO dao = jdbcTemplate.queryForObject("SELECT c.*,u.* FROM CITIZEN c JOIN USER u on u.USER_ID=c.USER_ID where u.USER_ID = ?",
                 new Object[]{userId}, (resultSet, i) -> extractFromRS(resultSet));
 
         return buildFromDAO(dao);
@@ -62,7 +62,7 @@ public class CitizenService {
     }
 
     public Citizen findByEmail(String email) {
-        CitizenDAO dao = jdbcTemplate.queryForObject("SELECT c.*,u.* FROM CITIZEN c JOIN USER u on u.USER_ID=c.USER_ID where EMAIL = ?",
+        CitizenDAO dao = jdbcTemplate.queryForObject("SELECT c.*,u.* FROM CITIZEN c JOIN USER u on u.USER_ID=c.USER_ID where u.EMAIL = ?",
                 new Object[]{email}, (resultSet, i) -> extractFromRS(resultSet));
         return buildFromDAO(dao);
     }

@@ -23,9 +23,9 @@ public class Demand {
 
 
     private String demandID;
-    private Town town;
     private Service service;
     private String name;
+    private String communalName;
     private Citizen creator;
     private Employee verificator;
     private TreeSet<Event> history;

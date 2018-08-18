@@ -20,6 +20,7 @@ public class TownDAO {
     private String address;
     private String phoneNumber;
     private String email;
+    private String mayorID;
     private int postalCode;
     private String country;
     private String logoPath;

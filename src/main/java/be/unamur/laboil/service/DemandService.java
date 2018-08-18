@@ -69,25 +69,7 @@ public class DemandService {
 
     public List<Demand> getMyDemands(String userID) {
         List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM DEMAND where CREATOR = ?", userID);
-        return rows
-                .stream()
-                .map(row -> {
-                    String demandID = (String) row.get("DEMAND_ID");
-                    TreeSet<Event> history = eventService.findHistoryOf(demandID);
-                    Demand demand = Demand.builder()
-                            .verificator(employeeService.findById((String) row.get("VERIFICATOR")))
-                            .creator(citizenService.findById((String) row.get("CREATOR")))
-                            .name((String) row.get("NAME"))
-                            .service(serviceService.findById((String) row.get("SERVICE_ID")))
-                            .documents(linkedDocumentService.findDocumentsOf(demandID))
-                            .information(demandInformationService.findInformationsOf(demandID))
-                            .demandID(demandID)
-                            .build();
-                    history.forEach(item -> item.setDemand(demand));
-                    demand.setHistory(history);
-                    return demand;
-                })
-                .collect(Collectors.toList());
+        return extractFromRows(rows);
     }
 
     public void insert(Demand demand, String comment) {
@@ -116,4 +98,36 @@ public class DemandService {
         LOGGER.debug("demand {} has been added", dao.toString());
     }
 
+    public List<Demand> findPendingDemandByService(String serviceID) {
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT *" +
+                        " FROM DEMAND d" +
+                        " where SERVICE_ID = ?" +
+                        "  AND NOT EXISTS(SELECT * FROM EVENT e WHERE e.DEMAND_ID = d.DEMAND_ID " +
+                        "                                         AND (e.STATUS like 'ACCEPTED' OR e.STATUS like 'REFUSED'))",
+                serviceID);
+
+        return extractFromRows(rows);
+    }
+
+    private List<Demand> extractFromRows(List<Map<String, Object>> rows) {
+        return rows
+                .stream()
+                .map(row -> {
+                    String demandID = (String) row.get("DEMAND_ID");
+                    TreeSet<Event> history = eventService.findHistoryOf(demandID);
+                    Demand demand = Demand.builder()
+                            .verificator(employeeService.findById((String) row.get("VERIFICATOR")))
+                            .creator(citizenService.findById((String) row.get("CREATOR")))
+                            .name((String) row.get("NAME"))
+                            .service(serviceService.findById((String) row.get("SERVICE_ID")))
+                            .documents(linkedDocumentService.findDocumentsOf(demandID))
+                            .information(demandInformationService.findInformationsOf(demandID))
+                            .demandID(demandID)
+                            .build();
+                    history.forEach(item -> item.setDemand(demand));
+                    demand.setHistory(history);
+                    return demand;
+                })
+                .collect(Collectors.toList());
+    }
 }

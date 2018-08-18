@@ -22,8 +22,5 @@ public class DemandForm {
     private List<File> linkedDocuments;
     private String comment;
     private String userID;
-    private String townID;
     private String placeSize;
-
-
 }

@@ -19,6 +19,7 @@ public class Service {
     private String serviceID;
     private String name;
     private String address;
+    private Employee administrator;
     private Town town;
 
 }

@@ -24,6 +24,7 @@ public class Town {
     private String address;
     private String email;
     private String phoneNumber;
+    private Employee mayor;
     private File logo;
     private String country;
     private int postalCode;

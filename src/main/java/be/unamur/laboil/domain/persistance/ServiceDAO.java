@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class ServiceDAO {
     private String serviceID;
     private String name;
+    private String administrator;
     private String town;
     private String address;
 

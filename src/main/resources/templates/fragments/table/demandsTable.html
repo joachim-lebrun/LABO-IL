@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="row" th:fragment="table">
+    <table class="striped">
+        <thead>
+        <tr>
+            <th th:text="#{table.demands.id}">First Name</th>
+            <th th:text="#{table.demands.creator.name}">Last Name</th>
+            <th th:text="#{table.demands.title}">Title</th>
+            <th th:text="#{table.demands.state}">State</th>
+            <th th:text="#{table.demands.generate}">Generate</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="demand : ${demands}">
+            <td th:text="${demand.demandID}"></td>
+            <td th:text="${demand.creatorName}"></td>
+            <td th:text="${demand.name}"></td>
+            <td th:text="${demand.currentStatus}"></td>
+            <td><a th:href="@{/demands/{id}/officialDocument(id=${demand.demandID})}"><i class="material-icons">
+                download
+            </i></a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</html>

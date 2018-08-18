@@ -2,6 +2,8 @@ package be.unamur.laboil.manager;
 
 import be.unamur.laboil.domain.core.Citizen;
 import be.unamur.laboil.domain.core.Demand;
+import be.unamur.laboil.domain.core.Employee;
+import be.unamur.laboil.domain.core.OfficialDocument;
 import be.unamur.laboil.domain.core.Town;
 import be.unamur.laboil.domain.core.User;
 import be.unamur.laboil.domain.view.CitizenView;
@@ -12,12 +14,15 @@ import be.unamur.laboil.service.CitizenService;
 import be.unamur.laboil.service.DemandService;
 import be.unamur.laboil.service.EmployeeService;
 import be.unamur.laboil.service.OfficialDocumentService;
+import be.unamur.laboil.service.PDFGeneratorService;
 import be.unamur.laboil.service.ServiceService;
 import be.unamur.laboil.service.TownService;
 import be.unamur.laboil.utilities.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,6 +45,8 @@ public class UserManager {
     private ServiceService serviceService;
     @Autowired
     private TownService townService;
+    @Autowired
+    private PDFGeneratorService pdfGeneratorService;
 
 
     public CitizenView getCitizen(String userId) {
@@ -49,6 +56,7 @@ public class UserManager {
                 .firstName(citizen.getFirstName())
                 .lastName(citizen.getLastName()).build();
     }
+
     public CitizenView getCitizenWithEmail(String email) {
         Citizen citizen = citizenService.findByEmail(email);
         return CitizenView.builder()
@@ -139,8 +147,39 @@ public class UserManager {
                 .name(demandForm.getName())
                 .documents(demandForm.getLinkedDocuments())
                 .creator(citizenService.findById(demandForm.getUserID()))
-                .town(townService.findById(demandForm.getTownID()))
                 .build();
         demandService.insert(newDemand, demandForm.getComment());
+    }
+
+    public EmployeeView getEmployeeWithEmail(String email) {
+        Employee employee = employeeService.findByEmail(email);
+        return EmployeeView.builder()
+                .userID(employee.getUserID())
+                .firstName(employee.getFirstName())
+                .lastName(employee.getLastName())
+                .build();
+    }
+
+    public List<SimpleDemandView> getPendingDemands(String email) {
+        Employee employee = employeeService.findByEmail(email);
+        List<Demand> demands = demandService.findPendingDemandByService(employee.getService().getServiceID());
+        return demands
+                .stream()
+                .map(demand -> SimpleDemandView.builder()
+                        .verificatorName(demand.getVerificator().getDisplayName())
+                        .serviceName(demand.getService().getName())
+                        .name(demand.getName())
+                        .demandID(demand.getDemandID())
+                        .createdDate(demand.getHistory().last().getCreationDate().format(Constants.FORMATTER))
+                        .currentStatus(demand.getHistory().last().getStatus().name())
+                        .creatorName(demand.getCreator().getDisplayName())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public FileSystemResource generatePDF(String demandID) throws IOException {
+        Demand demand = demandService.findByID(demandID);
+        OfficialDocument pdf = pdfGeneratorService.createPDF(demand);
+        return new FileSystemResource(pdf.getPdf());
     }
 }
