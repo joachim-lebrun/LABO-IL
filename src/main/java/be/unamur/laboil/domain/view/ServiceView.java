@@ -1,25 +1,20 @@
 package be.unamur.laboil.domain.view;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Joachim Lebrun on 06-08-18
  */
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ServiceView {
 
-    private String serviceName;
-    private String serviceTown;
+    private String name;
+    private String id;
 
-    public ServiceView(){
-
-    }
-    @Builder
-    public ServiceView(String serviceName, String serviceTown) {
-        this.serviceName = serviceName;
-        this.serviceTown = serviceTown;
-    }
 }

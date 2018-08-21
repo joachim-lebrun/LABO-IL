@@ -1,4 +1,47 @@
-#log-box {
+#carousel_home {
 
-    padding-left:200px;
+    margin-top: 5%;
+}
+
+body {
+    background-color: #e6e6e6;
+}
+
+.dark-bg {
+    background-color: #263238;
+}
+
+#slide1, #slide2, #slide3 {
+    color: #263238;
+    opacity: 50%;
+    text-align: left;
+    text-justify: auto;
+
+}
+
+#imgQuestion {
+    width: 70%;
+    vertical-align: center;
+}
+
+#imgSecurity {
+    width: 70%;
+    vertical-align: center;
+
+}
+
+.nav-wrapper {
+
+    background-color: #5a5a5a;
+}
+
+#logoNavBar {
+
+    width: 30%;
+    margin-left: 2%;
+}
+
+#signUpButton {
+
+    float: right;
 }

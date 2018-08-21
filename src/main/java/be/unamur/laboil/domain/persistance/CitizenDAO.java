@@ -2,6 +2,7 @@ package be.unamur.laboil.domain.persistance;
 
 import lombok.Builder;
 import lombok.Data;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * @author Joachim Lebrun on 06-08-18
@@ -21,5 +22,13 @@ public class CitizenDAO extends UserDAO {
     }
 
     public CitizenDAO() {
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("town", town)
+                .append("citizenID", citizenID)
+                .toString();
     }
 }

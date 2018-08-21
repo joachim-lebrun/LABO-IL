@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headers"></head>
+<body>
+<div class="">
+    <div class="row valign-wrapper" style="min-height: 100vh;">
+        <div class="col s6 center-align dark-bg" style="height: 100%">
+            <a class="btn btn-large orange" th:href="@{/citizens/me}">go to the citizen
+                platform </a>
+        </div>
+        <div class="col s6 center-align" style="height: 100%">
+            <a class="btn btn-large orange darken-3" th:href="@{/employees/me/service/demands}">go
+                to the employee platform </a>
+        </div>
+    </div>
+</div>
+</body>
+<span th:replace="fragments/general.html :: scripts"/>
+</html>

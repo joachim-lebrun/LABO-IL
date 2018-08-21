@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/general.html :: headers"></head>
+<body>
+
+<nav th:replace="fragments/general.html :: citizenNavbar"></nav>
+
+<div class="container">
+
+    <div th:replace="fragments/table/demandsTable.html :: table"></div>
+    <a class="btn-floating btn-large waves-effect waves-light orange modal-trigger right" href="#demandModal"><i class="material-icons">add</i></a>
+    <!-- Modal Structure -->
+    <div id="demandModal" class="modal">
+        <div class="modal-content">
+            <div th:replace="fragments/form/addDemand.html :: form"></div>
+        </div>
+    </div>
+</div>
+</body>
+<span th:replace="fragments/general.html :: scripts"/>
+</html>

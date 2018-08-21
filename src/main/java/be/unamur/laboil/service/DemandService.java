@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -43,19 +45,14 @@ public class DemandService {
     public Demand findByID(String demandID) {
         TreeSet<Event> history = eventService.findHistoryOf(demandID);
         DemandDAO dao = jdbcTemplate.queryForObject("SELECT * FROM DEMAND where DEMAND_ID = ?",
-                new Object[]{demandID}, (resultSet, i) -> DemandDAO.builder()
-                        .verificator(resultSet.getString("VERIFICATOR"))
-                        .creator(resultSet.getString("CREATOR"))
-                        .demandID(resultSet.getString("DEMAND_ID"))
-                        .name(resultSet.getString("NAME"))
-                        .serviceID(resultSet.getString("SERVICE_ID"))
-                        .build());
+                new Object[]{demandID}, (resultSet, i) -> extractFromRS(resultSet));
 
         Demand demand = Demand.builder()
                 .verificator(employeeService.findById(dao.getVerificator()))
                 .creator(citizenService.findById(dao.getCreator()))
                 .demandID(dao.getDemandID())
                 .name(dao.getName())
+                .communalName(dao.getCommunalName())
                 .service(serviceService.findById(dao.getServiceID()))
                 .documents(linkedDocumentService.findDocumentsOf(demandID))
                 .information(demandInformationService.findInformationsOf(demandID))
@@ -67,12 +64,25 @@ public class DemandService {
 
     }
 
+    private DemandDAO extractFromRS(ResultSet resultSet) throws SQLException {
+        return DemandDAO.builder()
+                .verificator(resultSet.getString("VERIFICATOR"))
+                .creator(resultSet.getString("CREATOR"))
+                .demandID(resultSet.getString("DEMAND_ID"))
+                .name(resultSet.getString("NAME"))
+                .serviceID(resultSet.getString("SERVICE_ID"))
+                .communalName(resultSet.getString("COMMUNAL_NAME"))
+                .build();
+    }
+
     public List<Demand> getMyDemands(String userID) {
         List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM DEMAND where CREATOR = ?", userID);
         return extractFromRows(rows);
     }
 
     public void insert(Demand demand, String comment) {
+        String demandID = UUID.randomUUID().toString();
+        demand.setDemandID(demandID);
         eventService.insert(Event.builder()
                 .status(EventStatus.NEW)
                 .user(demand.getCreator())
@@ -80,16 +90,16 @@ public class DemandService {
                 .comment(comment)
                 .build());
 
-        String demandID = UUID.randomUUID().toString();
         DemandDAO dao = DemandDAO.builder()
                 .demandID(demandID)
+                .serviceID(demand.getService().getServiceID())
                 .name(demand.getName())
                 .creator(demand.getCreator().getUserID())
-                .verificator(demand.getVerificator().getUserID())
+                .verificator(demand.getVerificator() == null ? null : demand.getVerificator().getUserID())
                 .build();
         demand.getDocuments().forEach(file -> linkedDocumentService.insert(demandID, file));
         demand.getInformation().forEach((key, value) -> demandInformationService.insert(demandID, key, value));
-        jdbcTemplate.update("INSERT INTO DEMAND (DEMAND_ID, NAME , CREATION_DATE, SERVICE_ID , CREATOR, VERIFICATOR) VALUES (?,?,?,?,?,?)",
+        jdbcTemplate.update("INSERT INTO DEMAND (DEMAND_ID, NAME , SERVICE_ID , CREATOR, VERIFICATOR) VALUES (?,?,?,?,?)",
                 dao.getDemandID(),
                 dao.getName(),
                 dao.getServiceID(),
@@ -116,18 +126,33 @@ public class DemandService {
                     String demandID = (String) row.get("DEMAND_ID");
                     TreeSet<Event> history = eventService.findHistoryOf(demandID);
                     Demand demand = Demand.builder()
-                            .verificator(employeeService.findById((String) row.get("VERIFICATOR")))
+                            .verificator(row.get("VERIFICATOR") == null ? null : employeeService.findById((String) row.get("VERIFICATOR")))
                             .creator(citizenService.findById((String) row.get("CREATOR")))
                             .name((String) row.get("NAME"))
                             .service(serviceService.findById((String) row.get("SERVICE_ID")))
                             .documents(linkedDocumentService.findDocumentsOf(demandID))
                             .information(demandInformationService.findInformationsOf(demandID))
                             .demandID(demandID)
+                            .communalName((String) row.get("COMMUNAL_NAME"))
                             .build();
                     history.forEach(item -> item.setDemand(demand));
                     demand.setHistory(history);
                     return demand;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public void update(Demand demand) {
+        DemandDAO dao = DemandDAO.builder()
+                .demandID(demand.getDemandID())
+                .communalName(demand.getCommunalName())
+                .serviceID(demand.getService().getServiceID())
+                .name(demand.getName())
+                .creator(demand.getCreator().getUserID())
+                .verificator(demand.getVerificator() == null ? null : demand.getVerificator().getUserID())
+                .build();
+        jdbcTemplate.update("UPDATE TABLE DEMAND" +
+                " SET VERIFICATOR = ?, COMMUNAL_NAME = ?" +
+                " WHERE DEMAND_ID = ?", dao.getVerificator(), dao.getCommunalName(), dao.getDemandID());
     }
 }

@@ -18,17 +18,16 @@ public class LoginController {
     private UserManager userManager;
 
     @GetMapping({"/login"})
-    public String login(Model model) {
+    public String login() {
         return "pages/login";
     }
-/*
-    @PostMapping({"/login"})
-    public String postLogin(Model model) {
-        return "redirect:/citizens/me";
-    }*/
 
+    @GetMapping({"/userType"})
+    public String userType() {
+        return "pages/userType";
+    }
 
-    @RequestMapping({"/public/signup"})
+    @RequestMapping({"/signup"})
     public String signup(Model model) {
         model.addAttribute("citizenView", CitizenView.builder().build());
         return "pages/signup";

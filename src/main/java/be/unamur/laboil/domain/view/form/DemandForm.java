@@ -23,4 +23,7 @@ public class DemandForm {
     private String comment;
     private String userID;
     private String placeSize;
+    private String address;
+    private String startDate;
+    private String endDate;
 }

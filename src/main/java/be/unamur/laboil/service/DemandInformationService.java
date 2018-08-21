@@ -28,7 +28,6 @@ public class DemandInformationService {
         jdbcTemplate.queryForList("SELECT * FROM DEMAND_INFO where DEMAND_ID = ?", demandID)
                 .forEach(row -> infoMap.put((String) row.get("INFO_KEY"), (String) row.get("INFO_VALUE")));
         return infoMap;
-
     }
 
     public void insert(String demandID, String key, String value) {
@@ -44,5 +43,19 @@ public class DemandInformationService {
                 dao.getKey(),
                 dao.getValue());
         LOGGER.debug("DemandInformation {} has been added", dao.toString());
+    }
+
+    public void insertAndUpdate(String demandId, Map<String, String> informations) {
+        Map<String, String> oldInfo = findInformationsOf(demandId);
+        informations.forEach((key, value) -> {
+            if (oldInfo.containsKey(key) && !oldInfo.get(key).equalsIgnoreCase(value)) {
+                jdbcTemplate.update("UPDATE TABLE DEMAND_INFO SET INFO_VALUE = ? WHERE INFO_KEY= ? and DEMAND_ID = ?",
+                        value,
+                        key,
+                        demandId);
+            } else {
+                insert(demandId, key, value);
+            }
+        });
     }
 }

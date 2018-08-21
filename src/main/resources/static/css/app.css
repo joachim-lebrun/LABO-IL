@@ -1,7 +1,5 @@
-#welcome {
-    color: blue;
-}
 
+.trololo
 .dropdown-content{
     width: max-content !important;
     height:auto !important;
@@ -15,4 +13,32 @@ header, body, footer {
     header, body, footer {
         padding-left: 0;
     }
+}
+.nav-wrapper {
+
+    background-color: #5a5a5a;
+}
+
+body {
+
+    background-color: #e6e6e6;
+}
+
+.sidenav {
+
+    background-color: #7d7d7d;
+}
+
+#logoSideNav {
+
+    width:50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+#logoSideNavDiv {
+
+    margin-bottom: 15%;
 }

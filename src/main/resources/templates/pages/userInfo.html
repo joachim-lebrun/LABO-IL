@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="ISO-8859-1">
-
-    <title>laboil</title>
-</head>
+<head th:replace="fragments/general.html :: headers"></head>
 <body>
-<h1>Test User from DB</h1>
+<nav th:replace="fragments/general.html :: citizenNavbar"></nav>
+<div class="container">
+<h1>Informations</h1>
 
 <table>
     <thead>
@@ -22,5 +20,7 @@
     </tr>
     </tbody>
 </table>
+</div>
+<span th:replace="fragments/general.html :: scripts"/>
 </body>
 </html>

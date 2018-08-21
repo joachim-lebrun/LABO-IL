@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="row" th:fragment="table">
+    <table class="striped">
+        <thead>
+        <tr>
+            <th th:text="#{table.demands.id}">First Name</th>
+            <th th:text="#{table.demands.creator.name}">Last Name</th>
+            <th th:text="#{table.demands.title}">Title</th>
+            <th th:text="#{table.demands.state}">State</th>
+            <th th:text="#{table.demands.actions}">actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="demand : ${demands}">
+            <td th:text="${demand.demandID}"></td>
+            <td th:text="${demand.creatorName}"></td>
+            <td th:text="${demand.name}"></td>
+            <td th:text="${demand.currentStatus}"></td>
+            <td>
+                <a th:href="'#refuseModal'+${demand.demandID}" class="waves-effect waves-light btn modal-trigger red">
+                    <i class="material-icons"> cross </i>
+                </a>
+                <div th:id="'refuseModal'+${demand.demandID}" class="modal">
+                    <div class="modal-content">
+                        <div th:replace="fragments/form/refuseDemand.html :: form"></div>
+                    </div>
+                </div>
+                <a th:href="'#validationModal'+${demand.demandID}" class="waves-effect waves-light btn modal-trigger green">
+                    <i class="material-icons"> validate </i>
+                </a>
+                <div th:id="'validationModal'+${demand.demandID}" class="modal">
+                    <div class="modal-content">
+                        <div th:replace="fragments/form/validateDemand.html :: form"></div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</html>

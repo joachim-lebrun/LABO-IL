@@ -1,19 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-<head th:replace="fragments/general.html :: homeHeaderfiles">
+<head th:replace="fragments/general.html :: headers">
 </head>
-
-
-
-
-
 <body>
 <nav th:replace="fragments/general.html :: homeNavbar"></nav>
 
 
 <div class="container">
 
-    <h1 id="welcome">Welcome</h1>
+    <div id="carousel_home" class="carousel carousel-slider center">
+        <div class="carousel-fixed-item center">
+        </div>
+        <div id="slide1" class="carousel-item" href="#one!">
+            <div class="container">
+                <div class="row">
+                <div class="col s5">
+                <img src="../../static/img/logo_laboil.png" th:src="@{img/logo_laboil.png}"/>
+                </div>
+                <div class="col s7">
+                <h2>Avec LaboIL, réalisez vos démarches administratives en ligne</h2>
+                    <ol style="list-style: circle">
+                        <li>Vos démarches toujours à portée de main</li>
+                        <li>Pour tous les citoyens domiciliés dans les communes de Lessines, Mons, Dinant, La Roche, Enghien ou Bousval</li>
+                        <li>En quelques clics, depuis un ordinateur ou une tablette</li>
+                        <li>24h/24, 7J/7</li>
+                    </ol>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div id="slide2" class="carousel-item" href="#two!">
+            <div class="container">
+                <div class="row">
+                    <div class="col s5">
+                        <img id="imgQuestion" src="../../static/img/question.png" th:src="@{img/question.png}"/>
+                    </div>
+                <div class="col s7">
+                    <h2>Comment ça marche?</h2>
+                        <ol style="list-style: circle">
+                            <li>enregistrez-vous via l'onlet Sign up de la barre d'outils ci-dessus et encodez toutes vos informations personnelles</li>
+                            <li>Connectez-vous sur votre tableau de bord via l'onglet Login de la barre d'outils ci-dessus</li>
+                            <li>Créez de nouvelles demandes et gérez vos documents administratifs au travers d'une interface simple et conviviale</li>
+                            <li>24h/24, 7J/7</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="slide3" class="carousel-item" href="#three!">
+            <div class="container">
+                <div class="row">
+                    <div class="col s6">
+                        <img id="imgSecurity" src="../../static/img/security.png" th:src="@{img/security.png}"/>
+                    </div>
+                    <div class="col s6">
+                        <h2>Sûr et confidentiel</h2>
+                            <p>Les démarches administratives via ce site officiel sont totalement sécurisées : vous connecter avec votre carte d'identité électronique garantit la parfaite sécurité de vos données personnelles.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 </body>
 <span th:replace="fragments/general.html :: scripts"/>

@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/general.html :: homeHeaderfiles">
-
+<head th:replace="fragments/general.html :: headers">
 </head>
 <body>
 <nav th:replace="fragments/general.html :: homeNavbar"></nav>
-<div class="container">
-    <div class="row">
+<div class="container" style="margin-top: 2rem">
+    <div class="row col s12 m6 z-depth-4 card-panel">
         <div th:replace="fragments/form/addCitizen.html :: form"/>
     </div>
 </div>

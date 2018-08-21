@@ -42,8 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/", "/img/*", "/css/*", "/js/*", "/public/*").permitAll()
-                .antMatchers("/employees/**", "/demands/**").hasAnyAuthority("EMPLOYEE")
+                .antMatchers("/", "/img/**", "/css/**", "/js/**", "/signup", "/public/*").permitAll()
+                .antMatchers("/demands/**").hasAnyAuthority("EMPLOYEE", "CITIZEN")
+                .antMatchers("/employees/**").hasAnyAuthority("EMPLOYEE")
                 .antMatchers("/admins/**").hasAnyAuthority("MAYOR")
                 .antMatchers("/citizens/**").hasAnyAuthority("CITIZEN")
                 .anyRequest().authenticated()
@@ -51,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/citizens/me", true)
+                .defaultSuccessUrl("/userType", true)
                 .permitAll()
                 .and()
                 .logout()

@@ -43,7 +43,7 @@ public class EventService {
                 dao.getComment(),
                 dao.getStatus(),
                 dao.getUserID(),
-                dao.getCreationDate());
+                dao.getCreationDate().format(Constants.SQL_FORMATTER));
         LOGGER.debug("event {} has been added", dao.toString());
     }
 

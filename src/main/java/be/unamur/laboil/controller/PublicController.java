@@ -18,7 +18,7 @@ public class PublicController {
     @Autowired
     private UserManager userManager;
 
-    @PostMapping("/public/register")
+    @PostMapping("/signup")
     public String saveCitizen(@ModelAttribute CitizenView citizenView, final BindingResult bindingResult, final ModelMap model) {
         if (bindingResult.hasErrors()) {
             return "signup";

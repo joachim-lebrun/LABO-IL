@@ -1,6 +1,5 @@
 package be.unamur.laboil.service;
 
-import be.unamur.laboil.domain.core.Demand;
 import be.unamur.laboil.domain.persistance.LinkedDocumentDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

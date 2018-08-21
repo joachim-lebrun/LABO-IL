@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div class="row">
-    <form th:fragment="form" class="col s12" action="#" th:action="@{/public/register}" th:object="${citizenView}"
-          method="post">
 
+<div class="row">
+    <form th:fragment="form" class="col s12" action="#" th:action="@{/signup}" th:object="${citizenView}"
+          method="post">
+        <div class="row">
+            <div class="input-field col s12 center">
+                <p class="center login-form-text">SIGN UP FORM : PLEASE ENTER YOUR DATA TO CREATE A NEW ACCOUNT</p>
+            </div>
+        </div>
         <div class="row">
             <div class="col s6">
                 <label th:text="#{home.form.firstName}" for="FNInput">First Name</label>
-                <input id="FNInput" type="text" th:field="*{firstName}" placeholder="First Name"/>
+                <input id="FNInput" type="text" th:field="*{firstName}" placeholder="First Name" required/>
             </div>
             <div class="col s6">
                 <label th:text="#{home.form.lastName}" for="LNInput">Last Name</label>
-                <input id="LNInput" type="text" th:field="*{lastName}" placeholder="Last Name"/>
+                <input id="LNInput" type="text" th:field="*{lastName}" placeholder="Last Name" required/>
             </div>
         </div>
         <div class="row">
             <div class="col s6">
                 <label th:text="#{home.form.address}" for="ADInput">Address</label>
-                <input id="ADInput" type="text" th:field="*{address}" placeholder="Address"/>
+                <input id="ADInput" type="text" th:field="*{address}" placeholder="Address" required/>
             </div>
             <div class="col s6">
                 <label th:text="#{home.form.birthDate}" for="BDInput">Birth Date</label>
-                <input id="BDInput" type="text" th:field="*{birthDate}" placeholder="BirthDate DD/MM/YYYY"/>
+                <input id="BDInput" type="text" th:field="*{birthDate}" placeholder="BirthDate DD/MM/YYYY" required/>
             </div>
         </div>
         <div class="row">
@@ -31,20 +36,20 @@
             </div>
             <div class="col s6">
                 <label th:text="#{home.form.email}" for="EMInput">email address</label>
-                <input id="EMInput" type="text" th:field="*{email}" placeholder="email address"/>
+                <input id="EMInput" type="text" th:field="*{email}" placeholder="email address" required/>
             </div>
         </div>
         <div class="row">
             <div class="col s4">
                 <label th:text="#{home.form.password}" for="PassInput">password</label>
-                <input id="PassInput" type="password" th:field="*{password}" placeholder="password"/>
+                <input id="PassInput" type="password" th:field="*{password}" placeholder="password" required/>
             </div>
             <div class="col s4">
                 <label th:text="#{home.form.natReg}" for="RNInput">Registre Nat</label>
-                <input id="RNInput" type="text" th:field="*{natReg}" placeholder="Registre Nat"/>
+                <input id="RNInput" type="text" th:field="*{natReg}" placeholder="Registre Nat" required/>
             </div>
-        </div>
-        <div class="row">
+
+
             <div class="input-field col s4">
                 <select th:field="*{town}">
                     <option value="" disabled selected th:text="#{citizen.form.town}">Select your town</option>
@@ -57,11 +62,14 @@
                 </select>
                 <label>Select your town</label>
             </div>
-            <div class="col s4">
-                <button class="btn waves-effect waves-light" type="submit" name="register">
+        </div>
+        <div class="row">
+            <div>
+                <button id="signUpButton" class="btn waves-effect waves-light" type="submit" name="signup">
                     <i class="material-icons right" th:text="#{home.form.register}">send</i>
                 </button>
             </div>
+
         </div>
     </form>
 </div>

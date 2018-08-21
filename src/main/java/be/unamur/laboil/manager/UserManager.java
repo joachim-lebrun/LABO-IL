@@ -3,16 +3,22 @@ package be.unamur.laboil.manager;
 import be.unamur.laboil.domain.core.Citizen;
 import be.unamur.laboil.domain.core.Demand;
 import be.unamur.laboil.domain.core.Employee;
+import be.unamur.laboil.domain.core.Event;
+import be.unamur.laboil.domain.core.EventStatus;
 import be.unamur.laboil.domain.core.OfficialDocument;
 import be.unamur.laboil.domain.core.Town;
 import be.unamur.laboil.domain.core.User;
 import be.unamur.laboil.domain.view.CitizenView;
 import be.unamur.laboil.domain.view.EmployeeView;
+import be.unamur.laboil.domain.view.ServiceView;
 import be.unamur.laboil.domain.view.SimpleDemandView;
 import be.unamur.laboil.domain.view.form.DemandForm;
+import be.unamur.laboil.domain.view.form.DemandUpdateForm;
 import be.unamur.laboil.service.CitizenService;
+import be.unamur.laboil.service.DemandInformationService;
 import be.unamur.laboil.service.DemandService;
 import be.unamur.laboil.service.EmployeeService;
+import be.unamur.laboil.service.EventService;
 import be.unamur.laboil.service.OfficialDocumentService;
 import be.unamur.laboil.service.PDFGeneratorService;
 import be.unamur.laboil.service.ServiceService;
@@ -24,7 +30,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +43,10 @@ public class UserManager {
 
     @Autowired
     private CitizenService citizenService;
+    @Autowired
+    private DemandInformationService demandInformationService;
+    @Autowired
+    private EventService eventService;
     @Autowired
     private EmployeeService employeeService;
     @Autowired
@@ -125,28 +137,27 @@ public class UserManager {
         return isValid;
     }
 
-    public List<SimpleDemandView> getMyDemands(String userID) {
+    public List<SimpleDemandView> getMyDemands(String email) {
         return demandService
-                .getMyDemands(userID)
+                .getMyDemands(citizenService.findByEmail(email).getUserID())
                 .stream()
-                .map(demand -> SimpleDemandView.builder()
-                        .creatorName(String.format("%s %s", demand.getCreator().getLastName(), demand.getCreator().getFirstName()))
-                        .currentStatus(demand.getHistory().last().getStatus().name())
-                        .createdDate(demand.getHistory().first().getCreationDate().format(Constants.FORMATTER))
-                        .demandID(demand.getDemandID())
-                        .name(demand.getName())
-                        .serviceName(demand.getService().getName())
-                        .verificatorName(String.format("%s %s", demand.getVerificator().getLastName(), demand.getVerificator().getFirstName()))
-                        .build())
+                .map(demand -> makeSimpleDemandViewFromDemand(demand))
                 .collect(Collectors.toList());
     }
 
-    public void createDemand(DemandForm demandForm) {
+    public void createDemand(DemandForm demandForm, String email) {
+        Citizen citizen = citizenService.findByEmail(email);
+        Map<String, String> informations = new HashMap<>();
+        informations.put("start", demandForm.getStartDate());
+        informations.put("end", demandForm.getEndDate());
+        informations.put("size", demandForm.getPlaceSize());
+        informations.put("address", demandForm.getAddress());
         Demand newDemand = Demand.builder()
                 .service(serviceService.findById(demandForm.getServiceId()))
                 .name(demandForm.getName())
                 .documents(demandForm.getLinkedDocuments())
-                .creator(citizenService.findById(demandForm.getUserID()))
+                .information(informations)
+                .creator(citizenService.findById(citizen.getUserID()))
                 .build();
         demandService.insert(newDemand, demandForm.getComment());
     }
@@ -160,26 +171,80 @@ public class UserManager {
                 .build();
     }
 
-    public List<SimpleDemandView> getPendingDemands(String email) {
+    public List<SimpleDemandView> getServicePendingDemands(String email) {
         Employee employee = employeeService.findByEmail(email);
         List<Demand> demands = demandService.findPendingDemandByService(employee.getService().getServiceID());
         return demands
                 .stream()
-                .map(demand -> SimpleDemandView.builder()
-                        .verificatorName(demand.getVerificator().getDisplayName())
-                        .serviceName(demand.getService().getName())
-                        .name(demand.getName())
-                        .demandID(demand.getDemandID())
-                        .createdDate(demand.getHistory().last().getCreationDate().format(Constants.FORMATTER))
-                        .currentStatus(demand.getHistory().last().getStatus().name())
-                        .creatorName(demand.getCreator().getDisplayName())
-                        .build())
+                .map(demand -> makeSimpleDemandViewFromDemand(demand))
                 .collect(Collectors.toList());
+    }
+
+    private SimpleDemandView makeSimpleDemandViewFromDemand(Demand demand) {
+        return SimpleDemandView.builder()
+                .verificatorName(demand.getVerificator() == null ? "-" : demand.getVerificator().getDisplayName())
+                .serviceName(demand.getService().getName())
+                .name(demand.getName())
+                .demandID(demand.getDemandID())
+                .createdDate(demand.getHistory().last().getCreationDate().format(Constants.FORMATTER))
+                .currentStatus(demand.getHistory().last().getStatus().name())
+                .creatorName(demand.getCreator().getDisplayName())
+                .build();
     }
 
     public FileSystemResource generatePDF(String demandID) throws IOException {
         Demand demand = demandService.findByID(demandID);
         OfficialDocument pdf = pdfGeneratorService.createPDF(demand);
         return new FileSystemResource(pdf.getPdf());
+    }
+
+    public List<ServiceView> getAllServicesOfMyTown(String email) {
+        return serviceService.findAllOfTown(citizenService.findByEmail(email).getTown().getTownID())
+                .stream()
+                .map(service -> ServiceView.builder()
+                        .name(service.getName())
+                        .id(service.getServiceID())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public void validateDemand(String demandID, String email, DemandUpdateForm demandUpdateForm) {
+        Demand demand = demandService.findByID(demandID);
+        Employee employee = employeeService.findByEmail(email);
+        Map<String, String> informations = demand.getInformation();
+        informations.put("amount", demandUpdateForm.getAmount());
+        informations.put("communalName", demandUpdateForm.getAmount());
+        demand.setVerificator(employee);
+        demand.setCommunalName(demandUpdateForm.getCommunalName());
+        demand.setInformation(informations);
+        Event event = new Event();
+        event.setDemand(demand);
+        event.setComment(demandUpdateForm.getComment());
+        event.setCreationDate(LocalDate.now());
+        event.setStatus(EventStatus.ACCEPTED);
+        event.setUser(employee);
+        demandInformationService.insertAndUpdate(demandID, informations);
+        eventService.insert(event);
+        demandService.update(demand);
+    }
+
+    public void refuseDemand(String demandID, String email, DemandUpdateForm demandUpdateForm) {
+        Demand demand = demandService.findByID(demandID);
+        Employee employee = employeeService.findByEmail(email);
+        Map<String, String> informations = demand.getInformation();
+        informations.put("amount", demandUpdateForm.getAmount());
+        informations.put("communalName", demandUpdateForm.getAmount());
+        demand.setVerificator(employee);
+        demand.setCommunalName(demandUpdateForm.getCommunalName());
+        demand.setInformation(informations);
+        Event event = new Event();
+        event.setDemand(demand);
+        event.setComment(demandUpdateForm.getComment());
+        event.setCreationDate(LocalDate.now());
+        event.setStatus(EventStatus.REFUSED);
+        event.setUser(employee);
+        demandInformationService.insertAndUpdate(demandID, informations);
+        eventService.insert(event);
+        demandService.update(demand);
     }
 }

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="ISO-8859-1">
+<head th:replace="fragments/general.html :: headers"></head>
 
-    <title>laboil</title>
-</head>
 <body>
+<nav th:replace="fragments/general.html :: employeeNavbar"></nav>
 <h1>Service Dashboard</h1>
 
 <div class="row">
-    <div th:replace="fragments/table/demandsTable.html :: table"></div>
+    <div th:replace="fragments/table/demandsValidationTable.html :: table"></div>
 </div>
+
+<span th:replace="fragments/general.html :: scripts"/>
 </body>
 </html>

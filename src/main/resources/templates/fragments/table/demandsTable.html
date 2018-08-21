@@ -17,9 +17,23 @@
             <td th:text="${demand.creatorName}"></td>
             <td th:text="${demand.name}"></td>
             <td th:text="${demand.currentStatus}"></td>
-            <td><a th:href="@{/demands/{id}/officialDocument(id=${demand.demandID})}"><i class="material-icons">
-                download
-            </i></a></td>
+            <td>
+                <div th:switch="${demand.currentStatus}" class="orange">
+                    <p th:case="'NEW'"></p>
+                    <p th:case="'PENDING'"></p>
+                    <p th:case="'ACCEPTED'"><a th:href="@{/demands/{id}/officialDocument(id=${demand.demandID})}">
+                        <i class="material-icons">
+                            download
+                        </i>
+                    </a></p>
+                    <p th:case="'REFUSED'"><a th:href="@{/demands/{id}/officialDocument(id=${demand.demandID})}">
+                        <i class="material-icons">
+                            download
+                        </i>
+                    </a></p>
+                </div>
+
+            </td>
         </tr>
         </tbody>
     </table>
