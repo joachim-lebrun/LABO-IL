@@ -76,7 +76,9 @@ CREATE TABLE EVENT (
   COMMENT       VARCHAR(255),
   DEMAND_ID     CHAR(36)    NOT NULL,
   STATUS        VARCHAR(20) NOT NULL,
-  CREATION_TIME VARCHAR(15) NOT NULL
+  CREATION_TIME VARCHAR(15) NOT NULL,
+  READ_EMPLOYEE CHAR(1) NOT NULL,
+  READ_CITIZEN CHAR(1) NOT NULL
 );
 
 CREATE TABLE DEMAND_INFO (
@@ -232,7 +234,7 @@ VALUES ('b6d71f3b-abc3-4343-9194-badd9a882784',
         'ADDRESS LESSINES',
         'LESSINES@be.be',
         '123456789',
-        'C:\\DEV\\logo.jpg',
+        '/Users/joachimlebrun/NetBeansProjects/labo-il/src/main/resources/static/img/LogoOnly.png',
         'b6d71f3b-1234-4343-9194-badd9a882784');
 INSERT INTO TOWN (TOWN_ID, NAME, TOWN_LANGUAGE, POSTAL_CODE, COUNTRY, ADDRESS, EMAIL, PHONE_NUMBER, LOGO_PATH, MAYOR_ID)
 VALUES ('bd4c7ef2-77b7-457d-8ba1-370673ce1a7a',
@@ -243,7 +245,7 @@ VALUES ('bd4c7ef2-77b7-457d-8ba1-370673ce1a7a',
         'ADDRESS MONS',
         'MONS@be.be',
         '123456789',
-        'C:\\DEV\\logo.jpg',
+        '/Users/joachimlebrun/NetBeansProjects/labo-il/src/main/resources/static/img/LogoOnly.png',
         'b6d71f3b-1234-4343-9194-badd9a882784');
 INSERT INTO TOWN (TOWN_ID, NAME, TOWN_LANGUAGE, POSTAL_CODE, COUNTRY, ADDRESS, EMAIL, PHONE_NUMBER, LOGO_PATH, MAYOR_ID)
 VALUES ('02ff9254-53ab-461e-a372-d8aa9695db5d',
@@ -254,7 +256,7 @@ VALUES ('02ff9254-53ab-461e-a372-d8aa9695db5d',
         'ADDRESS DINANT',
         'DINANT@be.be',
         '123456789',
-        'C:\\DEV\\logo.jpg',
+        '/Users/joachimlebrun/NetBeansProjects/labo-il/src/main/resources/static/img/LogoOnly.png',
         'b6d71f3b-1234-4343-9194-badd9a882784');
 INSERT INTO TOWN (TOWN_ID, NAME, TOWN_LANGUAGE, POSTAL_CODE, COUNTRY, ADDRESS, EMAIL, PHONE_NUMBER, LOGO_PATH, MAYOR_ID)
 VALUES ('2af7c53c-d43a-4912-8a77-97af82fb020c',
@@ -265,7 +267,7 @@ VALUES ('2af7c53c-d43a-4912-8a77-97af82fb020c',
         'ADDRESS LA ROCHE',
         'LAROCHE@be.be',
         '123456789',
-        'C:\\DEV\\logo.jpg',
+        '/Users/joachimlebrun/NetBeansProjects/labo-il/src/main/resources/static/img/LogoOnly.png',
         'b6d71f3b-4321-4343-9194-badd9a882784');
 INSERT INTO TOWN (TOWN_ID, NAME, TOWN_LANGUAGE, POSTAL_CODE, COUNTRY, ADDRESS, EMAIL, PHONE_NUMBER, LOGO_PATH, MAYOR_ID)
 VALUES ('38e31b98-c42d-4967-9ca8-127abf8785bf',
@@ -276,7 +278,7 @@ VALUES ('38e31b98-c42d-4967-9ca8-127abf8785bf',
         'ADDRESS ENGHIEN',
         'ENGHIEN@be.be',
         '123456789',
-        'C:\\DEV\\logo.jpg',
+        '/Users/joachimlebrun/NetBeansProjects/labo-il/src/main/resources/static/img/LogoOnly.png',
         'b6d71f3b-4321-4343-9194-badd9a882784');
 INSERT INTO TOWN (TOWN_ID, NAME, TOWN_LANGUAGE, POSTAL_CODE, COUNTRY, ADDRESS, EMAIL, PHONE_NUMBER, LOGO_PATH, MAYOR_ID)
 VALUES ('a7e39b8a-595a-4a65-a5ed-aa99073b765b',
@@ -287,7 +289,7 @@ VALUES ('a7e39b8a-595a-4a65-a5ed-aa99073b765b',
         'ADDRESS BOUSVAL',
         'BOUSVAL@be.be',
         '123456789',
-        'C:\\DEV\\logo.jpg',
+        '/Users/joachimlebrun/NetBeansProjects/labo-il/src/main/resources/static/img/LogoOnly.png',
         'b6d71f3b-4321-4343-9194-badd9a882784');
 
 INSERT INTO ROLE (EMAIL, RIGHTS)
@@ -324,28 +326,19 @@ VALUES ('hgghgghgghgghgghgghgghgghgghgghgghgg',
         'a1d71f3b-1234-4343-9194-badd9a882784',
         'COM NAME');
 
-INSERT INTO EVENT (EVENT_ID, USER_ID, COMMENT, DEMAND_ID, STATUS, CREATION_TIME)
-VALUES ('hgghgshgghgghgghgghgghgghgghgghgghgg',
+INSERT INTO EVENT (EVENT_ID, USER_ID, COMMENT, DEMAND_ID, STATUS, CREATION_TIME,READ_CITIZEN,READ_EMPLOYEE)
+VALUES ('hgghgshgghgghgghgghgghgghgghggwgghgg',
         'fdretgfd-1234-4343-9194-badd9a882784',
         'test create demand',
         'hgghgghgghgghgghgghgghgghgghgghgghgg',
         'NEW',
-        '20180818121212');
-
-INSERT INTO EVENT (EVENT_ID, USER_ID, COMMENT, DEMAND_ID, STATUS, CREATION_TIME)
-VALUES ('hgghgshgghgghggddghgghgghgghgghgghgg',
-        'a1d71f3b-1234-4343-9194-badd9a882784',
-        'response pending demand',
+        '20180818121212',"1","0");
+INSERT INTO EVENT (EVENT_ID, USER_ID, COMMENT, DEMAND_ID, STATUS, CREATION_TIME,READ_CITIZEN,READ_EMPLOYEE)
+VALUES ('hgghgshgqhgghgghgghggpgghgghgghggsgg',
+        'fdretgfd-1234-4343-9194-badd9a882784',
+        'test create demand',
         'hgghgghgghgghgghgghgghgghgghgghgghgg',
         'PENDING',
-        '20180819121212');
-
-INSERT INTO EVENT (EVENT_ID, USER_ID, COMMENT, DEMAND_ID, STATUS, CREATION_TIME)
-VALUES ('hgghgshgghgghggddghggh123gghgghgghgg',
-        'a1d71f3b-1234-4343-9194-badd9a882784',
-        'response ACC demand',
-        '08fd9c12-30b7-418d-9348-df49607d2d59	',
-        'ACCEPTED',
-        '20180822121212');
+        '20180818121220',"0","1");
 
 

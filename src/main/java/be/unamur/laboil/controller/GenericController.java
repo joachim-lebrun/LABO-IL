@@ -1,6 +1,7 @@
 package be.unamur.laboil.controller;
 
 import be.unamur.laboil.domain.view.ConversationItem;
+import be.unamur.laboil.domain.view.EventDetailedView;
 import be.unamur.laboil.domain.view.TownView;
 import be.unamur.laboil.manager.SystemManager;
 import be.unamur.laboil.manager.UserManager;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -49,7 +51,12 @@ public class GenericController {
     }
 
     @GetMapping({"/demands/{id}/events"})
-    public List<ConversationItem> history(@PathVariable("id") String demandID) {
-        return userManager.getHistoryOf(demandID);
+    public List<ConversationItem> history(@PathVariable("id") String demandID, @PathParam("citizen") boolean citizen) {
+        return userManager.getHistoryOf(demandID, citizen);
+    }
+
+    @GetMapping({"/demands/{id}/events/detailed"})
+    public List<EventDetailedView> detailed (@PathVariable("id") String demandID) {
+        return userManager.getDetailedHistoryOf(demandID);
     }
 }

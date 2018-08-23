@@ -12,7 +12,7 @@
         <div th:id="'chatBlock'+${demand.demandID}"></div>
     </div>
     <form class="" action="#"
-          th:action="@{/citizen/demands/{id}/comment(id=${demand.demandID})}"
+          th:action="@{/citizens/me/demands/{id}/comment(id=${demand.demandID})}"
           th:object="${demandUploadForm}"
           method="post">
         <div class="row">

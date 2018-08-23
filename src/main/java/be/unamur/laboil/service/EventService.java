@@ -42,16 +42,35 @@ public class EventService {
                 .eventID(UUID.randomUUID().toString())
                 .comment(event.getComment())
                 .userID(event.getUser().getUserID())
+                .readByCitizen(event.isReadByCitizen()?1 :0)
+                .readByEmployee(event.isReadByEmployee()?1 :0)
                 .build();
-        jdbcTemplate.update("INSERT INTO EVENT (EVENT_ID,DEMAND_ID,COMMENT,STATUS,USER_ID,CREATION_TIME) VALUES (?,?,?,?,?,?)",
+        jdbcTemplate.update("INSERT INTO EVENT (EVENT_ID,DEMAND_ID,COMMENT,STATUS,USER_ID,CREATION_TIME, READ_CITIZEN, READ_EMPLOYEE) VALUES (?,?,?,?,?,?,?,?)",
                 dao.getEventID(),
                 dao.getDemandID(),
                 dao.getComment(),
                 dao.getStatus(),
                 dao.getUserID(),
-                dao.getCreationTime().format(Constants.SQL_DT_FORMATTER));
+                dao.getCreationTime().format(Constants.SQL_DT_FORMATTER),
+                dao.getReadByCitizen(),
+                dao.getReadByEmployee());
         LOGGER.debug("event {} has been added", dao.toString());
     }
+
+    public void update(Event event) {
+        EventDAO dao = EventDAO.builder()
+                .eventID(event.getEventID())
+                .readByCitizen(event.isReadByCitizen()?1 :0)
+                .readByEmployee(event.isReadByEmployee()?1 :0)
+                .build();
+        jdbcTemplate.update("UPDATE EVENT SET READ_CITIZEN = ? , READ_EMPLOYEE  = ? WHERE EVENT_ID = ?",
+                dao.getReadByCitizen(),
+                dao.getReadByEmployee(),
+                dao.getEventID());
+        LOGGER.debug("event {} has been added", dao.toString());
+    }
+
+
 
     public TreeSet<Event> findHistoryOf(String demandID) {
         List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM EVENT where DEMAND_ID = ?", demandID);
@@ -63,6 +82,8 @@ public class EventService {
                             .creationTime(LocalDateTime.parse((String) row.get("CREATION_TIME"), Constants.SQL_DT_FORMATTER))
                             .eventID((String) row.get("EVENT_ID"))
                             .comment((String) row.get("COMMENT"))
+                            .readByCitizen("1".equalsIgnoreCase((String) row.get("READ_CITIZEN")))
+                            .readByEmployee("1".equalsIgnoreCase((String)row.get("READ_EMPLOYEE")))
                             .build();
                     String userId = (String) row.get("USER_ID");
                     User user = citizenService.findById(userId);

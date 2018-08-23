@@ -23,6 +23,8 @@ public class EventDAO {
     private String comment;
     private String userID;
     private LocalDateTime creationTime;
+    private int readByEmployee;
+    private int readByCitizen;
 
 
     @Override

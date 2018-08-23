@@ -88,6 +88,7 @@ public class DemandService {
                 .user(demand.getCreator())
                 .demand(demand)
                 .comment(comment)
+                .readByCitizen(true)
                 .build());
 
         DemandDAO dao = DemandDAO.builder()

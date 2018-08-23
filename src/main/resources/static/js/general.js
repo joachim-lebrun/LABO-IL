@@ -12,13 +12,13 @@ $(document).ready(function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    var elems = document.querySelectorAll('.sidenav');
-    var instances = M.Sidenav.init(elems, options);
+    let elems = document.querySelectorAll('.sidenav');
+    let instances = M.Sidenav.init(elems, {});
 });
 
-// Initialize collapsible (uncomment the lines below if you use the dropdown variation)
-// var collapsibleElem = document.querySelector('.collapsible');
-// var collapsibleInstance = M.Collapsible.init(collapsibleElem, options);
+// Initialize collapsible (uncomment the lines below if you use the dropdown letiation)
+// let collapsibleElem = document.querySelector('.collapsible');
+// let collapsibleInstance = M.Collapsible.init(collapsibleElem, options);
 
 // Or with jQuery
 
@@ -34,20 +34,30 @@ $('.carousel.carousel-slider').carousel({
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    var elems = document.querySelectorAll('.datepicker');
-    var instances = M.Datepicker.init(elems, {
+    let elems = document.querySelectorAll('.datepicker');
+    let instances = M.Datepicker.init(elems, {
         format: "d/mm/yyyy"
     });
 });
 
 
-var refreshHistory = function (id) {
-    $.get("/demands/" + id + "/events", function (data, status) {
-        var html = "";
+const refreshHistory = function (id,citizen) {
+    $.get(`/demands/${id}/events?citizen=${citizen}`, function (data, status) {
+        let html = "";
         for (event of data) {
             html += `<div class="row">${event.userName} (${event.time}): ${event.comment}</div>`
         }
         console.log(html);
         $('#chatBlock' + id).html(html)
+    });
+};
+const detailsHistory = function (id) {
+    $.get("/demands/" + id + "/events/detailed", function (data, status) {
+        let html = "";
+        for (event of data) {
+            html += `<tr><td> ${event.time}</td><td> ${event.userName}</td><td> ${event.comment}</td><td> ${event.status}</td></tr>`
+        }
+        console.log(html);
+        $('#chatBlockD' + id).replaceWith(html)
     });
 };

@@ -4,19 +4,30 @@
 <body>
 <nav th:replace="fragments/general.html :: citizenNavbar"></nav>
 <div class="container">
-<h1>Informations</h1>
+<h1 th:text="#{userInfo.mainTable.Title}">My Profile informations</h1>
 
 <table>
     <thead>
     <tr>
         <th th:text="#{userInfo.mainTable.firstName}">First Name</th>
         <th th:text="#{userInfo.mainTable.lastName}">Last Name</th>
+        <th th:text="#{userInfo.mainTable.address}">address</th>
+        <th th:text="#{userInfo.mainTable.phoneNumber}">phoneNumber</th>
+        <th th:text="#{userInfo.mainTable.birthDate}">birthDate</th>
+        <th th:text="#{userInfo.mainTable.email}">email</th>
+        <th th:text="#{userInfo.mainTable.natReg}">natReg</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td th:text="${citizen.firstName}">13/01/2011</td>
-        <td th:text="${citizen.lastName}">yes</td>
+        <td th:text="${citizen.firstName}">firstName</td>
+        <td th:text="${citizen.lastName}">lastName</td>
+        <td th:text="${citizen.address}">address</td>
+        <td th:text="${citizen.phoneNumber}">phoneNumber</td>
+        <td th:text="${citizen.birthDate}">birthDate</td>
+        <td th:text="${citizen.email}">email</td>
+        <td th:text="${citizen.natReg}">natReg</td>
+
     </tr>
     </tbody>
 </table>

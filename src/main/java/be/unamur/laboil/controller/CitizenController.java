@@ -32,7 +32,6 @@ public class CitizenController {
         User user = (User) authentication.getPrincipal();
         CitizenView citizenWithEmail = userManager.getCitizenWithEmail(user.getUsername());
         model.addAttribute("citizen", citizenWithEmail);
-        model.addAttribute("demands", userManager.getMyDemands(user.getUsername()));
         model.addAttribute("citizenUUID", citizenWithEmail.getUserID());
         return "pages/userInfo";
     }
@@ -63,7 +62,7 @@ public class CitizenController {
     }
 
 
-    @PostMapping({"/citizens/demands/{id}/comment"})
+    @PostMapping({"/citizens/me/demands/{id}/comment"})
     public String comment(@PathVariable("id") String demandID, @ModelAttribute DemandUpdateForm demandUpdateForm) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();

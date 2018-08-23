@@ -16,7 +16,7 @@
             <td th:text="${demand.demandID}"></td>
             <td th:text="${demand.creatorName}"></td>
             <td th:text="${demand.name}"></td>
-            <td th:text="${demand.currentStatus}"></td>
+            <td><span th:text="${demand.currentStatus}"></span><span th:if="${demand.unreadAmount} >0" class="new badge orange" th:text="${demand.unreadAmount}" data-badge-caption=""></span></td>
             <td>
                 <a th:href="'#refuseModal'+${demand.demandID}" class="waves-effect waves-light btn btn-small modal-trigger red lighten-1">
                     <i class="material-icons"> clear </i>
@@ -28,7 +28,7 @@
                 </div>
                 <a th:href="'#commentModal'+${demand.demandID}"
                    class="waves-effect waves-light btn btn-small modal-trigger orange lighten-1"
-                    th:onclick="'refreshHistory(\''+${demand.demandID}+'\')'">
+                    th:onclick="'refreshHistory(\''+${demand.demandID}+'\',false)'">
                     <i class="material-icons"> comment </i>
                 </a>
                 <div th:id="'commentModal'+${demand.demandID}" class="modal">

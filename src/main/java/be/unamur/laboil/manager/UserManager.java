@@ -8,11 +8,7 @@ import be.unamur.laboil.domain.core.EventStatus;
 import be.unamur.laboil.domain.core.OfficialDocument;
 import be.unamur.laboil.domain.core.Town;
 import be.unamur.laboil.domain.core.User;
-import be.unamur.laboil.domain.view.CitizenView;
-import be.unamur.laboil.domain.view.ConversationItem;
-import be.unamur.laboil.domain.view.EmployeeView;
-import be.unamur.laboil.domain.view.ServiceView;
-import be.unamur.laboil.domain.view.SimpleDemandView;
+import be.unamur.laboil.domain.view.*;
 import be.unamur.laboil.domain.view.form.DemandForm;
 import be.unamur.laboil.domain.view.form.DemandUpdateForm;
 import be.unamur.laboil.service.CitizenService;
@@ -32,9 +28,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -68,7 +62,13 @@ public class UserManager {
         return CitizenView.builder()
                 .userID(citizen.getUserID())
                 .firstName(citizen.getFirstName())
-                .lastName(citizen.getLastName()).build();
+                .lastName(citizen.getLastName())
+                .address(citizen.getAddress())
+                .phoneNumber(citizen.getPhoneNumber())
+                .birthDate(citizen.getBirthDate().format(Constants.FORMATTER))
+                .email(citizen.getEmail())
+                .natReg(citizen.getNatReg())
+                .build();
     }
 
     public CitizenView getCitizenWithEmail(String email) {
@@ -76,7 +76,13 @@ public class UserManager {
         return CitizenView.builder()
                 .userID(citizen.getUserID())
                 .firstName(citizen.getFirstName())
-                .lastName(citizen.getLastName()).build();
+                .lastName(citizen.getLastName())
+                .address(citizen.getAddress())
+                .phoneNumber(citizen.getPhoneNumber())
+                .birthDate(citizen.getBirthDate().format(Constants.FORMATTER))
+                .email(citizen.getEmail())
+                .natReg(citizen.getNatReg())
+                .build();
     }
 
     public List<CitizenView> getAllCitizens() {
@@ -143,7 +149,7 @@ public class UserManager {
         return demandService
                 .getMyDemands(citizenService.findByEmail(email).getUserID())
                 .stream()
-                .map(this::makeSimpleDemandViewFromDemand)
+                .map(demand -> makeSimpleDemandViewFromDemand(demand,true))
                 .collect(Collectors.toList());
     }
 
@@ -161,7 +167,7 @@ public class UserManager {
         Demand newDemand = Demand.builder()
                 .service(serviceService.findById(demandForm.getServiceId()))
                 .name(demandForm.getName())
-                .documents(demandForm.getLinkedDocuments())
+                .documents(demandForm.getLinkedDocuments() ==null? new ArrayList<>() : demandForm.getLinkedDocuments())
                 .information(informations)
                 .creator(citizenService.findById(citizen.getUserID()))
                 .build();
@@ -182,11 +188,15 @@ public class UserManager {
         List<Demand> demands = demandService.findPendingDemandByService(employee.getService().getServiceID());
         return demands
                 .stream()
-                .map(this::makeSimpleDemandViewFromDemand)
+                .map(demand -> makeSimpleDemandViewFromDemand(demand,false))
                 .collect(Collectors.toList());
     }
 
-    private SimpleDemandView makeSimpleDemandViewFromDemand(Demand demand) {
+    private SimpleDemandView makeSimpleDemandViewFromDemand(Demand demand,boolean citizen) {
+        int unreadAmount = (int) demand.getHistory()
+                .stream()
+                .filter(event -> (citizen && !event.isReadByCitizen())||(!citizen && !event.isReadByEmployee()))
+                .count();
         return SimpleDemandView.builder()
                 .verificatorName(demand.getVerificator() == null ? "-" : demand.getVerificator().getDisplayName())
                 .serviceName(demand.getService().getName())
@@ -199,6 +209,7 @@ public class UserManager {
                 .createdDate(demand.getHistory().last().getCreationTime().format(Constants.FORMATTER))
                 .currentStatus(demand.getHistory().last().getStatus().name())
                 .creatorName(demand.getCreator().getDisplayName())
+                .unreadAmount(unreadAmount)
                 .build();
     }
 
@@ -231,6 +242,7 @@ public class UserManager {
         event.setComment(demandUpdateForm.getComment());
         event.setCreationTime(LocalDateTime.now());
         event.setStatus(EventStatus.ACCEPTED);
+        event.setReadByEmployee(true);
         event.setUser(employee);
         demandInformationService.insertAndUpdate(demandID, informations);
         eventService.insert(event);
@@ -248,6 +260,7 @@ public class UserManager {
         event.setCreationTime(LocalDateTime.now());
         event.setStatus(EventStatus.REFUSED);
         event.setUser(employee);
+        event.setReadByEmployee(true);
         eventService.insert(event);
         demandService.update(demand);
     }
@@ -262,6 +275,7 @@ public class UserManager {
         event.setCreationTime(LocalDateTime.now());
         event.setStatus(EventStatus.PENDING);
         event.setUser(employee);
+        event.setReadByEmployee(true);
         eventService.insert(event);
         demandService.update(demand);
     }
@@ -275,17 +289,47 @@ public class UserManager {
         event.setCreationTime(LocalDateTime.now());
         event.setStatus(EventStatus.PENDING);
         event.setUser(citizen);
+        event.setReadByCitizen(true);
         eventService.insert(event);
         demandService.update(demand);
     }
 
-    public List<ConversationItem> getHistoryOf(String demandID) {
-        return eventService
-                .findHistoryOf(demandID)
+    public List<ConversationItem> getHistoryOf(String demandID,boolean citizen) {
+        TreeSet<Event> events = eventService
+                .findHistoryOf(demandID);
+        events.stream()
+                .peek(event -> {
+                    if (citizen){
+                        event.setReadByCitizen(true);
+                    } else {
+                        event.setReadByEmployee(true);
+                    }
+                })
+                .forEach(event -> eventService.update(event));
+        List<ConversationItem> conversationItems = events
                 .stream()
                 .map(event -> ConversationItem.builder()
                         .userName(event.getUser().getDisplayName())
                         .comment(event.getComment())
+                        .time(event.getCreationTime().format(Constants.DT_FORMATTER))
+                        .isEmployee(event.getUser() instanceof Employee)
+                        .build())
+                .collect(Collectors.toList());
+        return conversationItems;
+    }
+
+    public List<EventDetailedView> getDetailedHistoryOf(String demandID) {
+        TreeSet<Event> events = eventService
+                .findHistoryOf(demandID);
+        events.stream()
+                .peek(event -> event.setReadByCitizen(true))
+                .forEach(event -> eventService.update(event));
+        return events
+                .stream()
+                .map(event -> EventDetailedView.builder()
+                        .userName(event.getUser().getDisplayName())
+                        .comment(event.getComment())
+                        .status(event.getStatus().name())
                         .time(event.getCreationTime().format(Constants.DT_FORMATTER))
                         .isEmployee(event.getUser() instanceof Employee)
                         .build())

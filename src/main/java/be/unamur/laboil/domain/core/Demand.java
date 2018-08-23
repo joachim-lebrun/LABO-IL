@@ -10,9 +10,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * @author Joachim Lebrun on 06-08-18
@@ -32,9 +30,9 @@ public class Demand {
     private String communalName;
     private Citizen creator;
     private Employee verificator;
-    private TreeSet<Event> history;
-    private List<File> documents;
-    private Map<String, String> information;
+    private TreeSet<Event> history = new TreeSet<>();
+    private List<File> documents = new ArrayList<>();
+    private Map<String, String> information = new TreeMap<>();
 
     @Override
     public String toString() {

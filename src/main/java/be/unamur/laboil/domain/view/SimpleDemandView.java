@@ -24,4 +24,5 @@ public class SimpleDemandView {
     private String verificatorName;
     private String currentStatus;
     private String createdDate;
+    private int unreadAmount;
 }

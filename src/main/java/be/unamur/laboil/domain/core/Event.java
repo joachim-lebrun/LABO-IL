@@ -24,19 +24,25 @@ public class Event implements Comparable<Event> {
     private User user;
     private EventStatus status;
     private LocalDateTime creationTime;
+    private boolean readByCitizen;
+    private boolean readByEmployee;
 
     public Event() {
     }
-
     @Builder
-    public Event(String eventID, Demand demand, String comment, User user, EventStatus status, LocalDateTime creationTime) {
+    public Event(String eventID, Demand demand, String comment, User user, EventStatus status, LocalDateTime creationTime, boolean readByCitizen, boolean readByEmployee) {
         this.eventID = eventID;
         this.demand = demand;
         this.comment = comment;
         this.user = user;
         this.status = status;
         this.creationTime = creationTime;
+        this.readByCitizen = readByCitizen;
+        this.readByEmployee = readByEmployee;
     }
+
+
+
 
     @Override
     public int compareTo(Event o) {
