@@ -49,7 +49,7 @@ public class DemandInformationService {
         Map<String, String> oldInfo = findInformationsOf(demandId);
         informations.forEach((key, value) -> {
             if (oldInfo.containsKey(key) && !oldInfo.get(key).equalsIgnoreCase(value)) {
-                jdbcTemplate.update("UPDATE TABLE DEMAND_INFO SET INFO_VALUE = ? WHERE INFO_KEY= ? and DEMAND_ID = ?",
+                jdbcTemplate.update("UPDATE DEMAND_INFO SET INFO_VALUE = ? WHERE INFO_KEY= ? and DEMAND_ID = ?",
                         value,
                         key,
                         demandId);

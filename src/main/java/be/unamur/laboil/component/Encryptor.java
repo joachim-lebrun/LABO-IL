@@ -64,7 +64,7 @@ public class Encryptor {
         return cipher;
     }
 
-    private Key buildKey(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    private Key buildKey(String password) throws NoSuchAlgorithmException {
         MessageDigest digester = MessageDigest.getInstance(PASS_HASH_ALGORITHM);
         digester.update(String.valueOf(password).getBytes(UTF_8));
         byte[] key = Arrays.copyOf(digester.digest(), 16);

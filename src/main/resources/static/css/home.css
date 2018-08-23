@@ -7,9 +7,7 @@ body {
     background-color: #e6e6e6;
 }
 
-.dark-bg {
-    background-color: #263238;
-}
+
 
 #slide1, #slide2, #slide3 {
     color: #263238;
@@ -44,4 +42,12 @@ body {
 #signUpButton {
 
     float: right;
+}
+
+#splitBG {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
 }

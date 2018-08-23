@@ -62,21 +62,21 @@ CREATE TABLE OFFICIAL_DOC (
 );
 
 CREATE TABLE DEMAND (
-  DEMAND_ID   CHAR(36) PRIMARY KEY,
-  NAME        VARCHAR(255) NOT NULL,
-  COMMUNAL_NAME        VARCHAR(255),
-  SERVICE_ID  CHAR(36)     NOT NULL,
-  CREATOR     CHAR(36)     NOT NULL,
-  VERIFICATOR CHAR(36)
+  DEMAND_ID     CHAR(36) PRIMARY KEY,
+  NAME          VARCHAR(255) NOT NULL,
+  COMMUNAL_NAME VARCHAR(255),
+  SERVICE_ID    CHAR(36)     NOT NULL,
+  CREATOR       CHAR(36)     NOT NULL,
+  VERIFICATOR   CHAR(36)
 );
 
 CREATE TABLE EVENT (
   EVENT_ID      CHAR(36) PRIMARY KEY,
-  USER_ID       CHAR(36)     NOT NULL,
+  USER_ID       CHAR(36)    NOT NULL,
   COMMENT       VARCHAR(255),
-  DEMAND_ID     CHAR(36)     NOT NULL,
-  STATUS        VARCHAR(20)  NOT NULL,
-  CREATION_DATE VARCHAR(10)         NOT NULL
+  DEMAND_ID     CHAR(36)    NOT NULL,
+  STATUS        VARCHAR(20) NOT NULL,
+  CREATION_TIME VARCHAR(15) NOT NULL
 );
 
 CREATE TABLE DEMAND_INFO (
@@ -134,25 +134,25 @@ INSERT INTO SERVICE (SERVICE_ID, NAME, TOWN_ID, ADMINISTRATOR, ADDRESS)
 VALUES ('cccccccccccccccccccccccccccccccccccc',
         'VOIRIE',
         '02ff9254-53ab-461e-a372-d8aa9695db5d',
-        '$2a$10$sU0ar6aHnmZLbWIDOzfdMuYGk7oIREPM5K56N7GMObdMzPEU8V.tO',
+        'a1e71f3b-1234-4343-9194-badd9a882784',
         'rue de la mairie, 1');
 INSERT INTO SERVICE (SERVICE_ID, NAME, TOWN_ID, ADMINISTRATOR, ADDRESS)
 VALUES ('dddddddddddddddddddddddddddddddddddd',
         'VOIRIE',
         '2af7c53c-d43a-4912-8a77-97af82fb020c',
-        '$2a$10$sU0ar6aHnmZLbWIDOzfdMuYGk7oIREPM5K56N7GMObdMzPEU8V.tO',
+        'a1e71f3b-1234-4343-9194-badd9a882784',
         'rue de la mairie, 1');
 INSERT INTO SERVICE (SERVICE_ID, NAME, TOWN_ID, ADMINISTRATOR, ADDRESS)
 VALUES ('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         'VOIRIE',
         '38e31b98-c42d-4967-9ca8-127abf8785bf',
-        '$2a$10$sU0ar6aHnmZLbWIDOzfdMuYGk7oIREPM5K56N7GMObdMzPEU8V.tO',
+        'a1e71f3b-1234-4343-9194-badd9a882784',
         'rue de la mairie, 1');
 INSERT INTO SERVICE (SERVICE_ID, NAME, TOWN_ID, ADMINISTRATOR, ADDRESS)
 VALUES ('ffffffffffffffffffffffffffffffffffff',
         'VOIRIE',
         'a7e39b8a-595a-4a65-a5ed-aa99073b765b',
-        '$2a$10$sU0ar6aHnmZLbWIDOzfdMuYGk7oIREPM5K56N7GMObdMzPEU8V.tO',
+        'a1e71f3b-1234-4343-9194-badd9a882784',
         'rue de la mairie, 1');
 
 
@@ -316,35 +316,36 @@ INSERT INTO ROLE (EMAIL, RIGHTS)
 VALUES ('test@gmail.com', 'CITIZEN');
 
 
-INSERT INTO DEMAND (DEMAND_ID, NAME, SERVICE_ID, CREATOR, VERIFICATOR,COMMUNAL_NAME)
+INSERT INTO DEMAND (DEMAND_ID, NAME, SERVICE_ID, CREATOR, VERIFICATOR, COMMUNAL_NAME)
 VALUES ('hgghgghgghgghgghgghgghgghgghgghgghgg',
         'test',
         'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
         'fdretgfd-1234-4343-9194-badd9a882784',
-        'a1d71f3b-1234-4343-9194-badd9a882784','COM NAME');
+        'a1d71f3b-1234-4343-9194-badd9a882784',
+        'COM NAME');
 
-INSERT INTO EVENT (EVENT_ID, USER_ID, COMMENT, DEMAND_ID, STATUS, CREATION_DATE)
+INSERT INTO EVENT (EVENT_ID, USER_ID, COMMENT, DEMAND_ID, STATUS, CREATION_TIME)
 VALUES ('hgghgshgghgghgghgghgghgghgghgghgghgg',
         'fdretgfd-1234-4343-9194-badd9a882784',
         'test create demand',
         'hgghgghgghgghgghgghgghgghgghgghgghgg',
         'NEW',
-        '20180818');
+        '20180818121212');
 
-INSERT INTO EVENT (EVENT_ID, USER_ID, COMMENT, DEMAND_ID, STATUS, CREATION_DATE)
+INSERT INTO EVENT (EVENT_ID, USER_ID, COMMENT, DEMAND_ID, STATUS, CREATION_TIME)
 VALUES ('hgghgshgghgghggddghgghgghgghgghgghgg',
         'a1d71f3b-1234-4343-9194-badd9a882784',
         'response pending demand',
         'hgghgghgghgghgghgghgghgghgghgghgghgg',
         'PENDING',
-        '20180819');
+        '20180819121212');
 
-INSERT INTO EVENT (EVENT_ID, USER_ID, COMMENT, DEMAND_ID, STATUS, CREATION_DATE)
+INSERT INTO EVENT (EVENT_ID, USER_ID, COMMENT, DEMAND_ID, STATUS, CREATION_TIME)
 VALUES ('hgghgshgghgghggddghggh123gghgghgghgg',
         'a1d71f3b-1234-4343-9194-badd9a882784',
         'response ACC demand',
         '08fd9c12-30b7-418d-9348-df49607d2d59	',
         'ACCEPTED',
-        '20180822');
+        '20180822121212');
 
 

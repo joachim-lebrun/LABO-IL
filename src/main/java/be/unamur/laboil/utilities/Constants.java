@@ -11,5 +11,7 @@ public class Constants {
     }
 
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    public static final DateTimeFormatter DT_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     public static final DateTimeFormatter SQL_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
+    public static final DateTimeFormatter SQL_DT_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 }

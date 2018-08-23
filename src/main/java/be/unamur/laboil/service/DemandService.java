@@ -48,7 +48,7 @@ public class DemandService {
                 new Object[]{demandID}, (resultSet, i) -> extractFromRS(resultSet));
 
         Demand demand = Demand.builder()
-                .verificator(employeeService.findById(dao.getVerificator()))
+                .verificator(dao.getVerificator() == null ? null : employeeService.findById(dao.getVerificator()))
                 .creator(citizenService.findById(dao.getCreator()))
                 .demandID(dao.getDemandID())
                 .name(dao.getName())
@@ -151,7 +151,7 @@ public class DemandService {
                 .creator(demand.getCreator().getUserID())
                 .verificator(demand.getVerificator() == null ? null : demand.getVerificator().getUserID())
                 .build();
-        jdbcTemplate.update("UPDATE TABLE DEMAND" +
+        jdbcTemplate.update("UPDATE DEMAND" +
                 " SET VERIFICATOR = ?, COMMUNAL_NAME = ?" +
                 " WHERE DEMAND_ID = ?", dao.getVerificator(), dao.getCommunalName(), dao.getDemandID());
     }

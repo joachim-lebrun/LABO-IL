@@ -1,14 +1,20 @@
 package be.unamur.laboil.domain.persistance;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author Joachim Lebrun on 06-08-18
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class EventDAO {
 
     private String eventID;
@@ -16,17 +22,18 @@ public class EventDAO {
     private String status;
     private String comment;
     private String userID;
-    private LocalDate creationDate;
+    private LocalDateTime creationTime;
 
 
-    @Builder
-
-    public EventDAO(String eventID, String demandID, String status, String comment, String userID, LocalDate creationDate) {
-        this.eventID = eventID;
-        this.demandID = demandID;
-        this.status = status;
-        this.comment = comment;
-        this.userID = userID;
-        this.creationDate = creationDate;
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("eventID", eventID)
+                .append("demandID", demandID)
+                .append("status", status)
+                .append("comment", comment)
+                .append("userID", userID)
+                .append("creationTime", creationTime)
+                .toString();
     }
 }

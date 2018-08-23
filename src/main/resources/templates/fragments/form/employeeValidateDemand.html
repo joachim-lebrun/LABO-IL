@@ -1,9 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<div class="row">
-    <form th:fragment="form" class="col s12" action="#"
-          th:action="@{/demands/{id}/refuse(id=${demand.demandID})}"
+<div th:fragment="form">
+    <div th:id="'detailContainer'+${demand.demandID}">
+        <div class="row">
+            <div class="col s6">
+                <p>User referance Name : <span th:text="${demand.name}"></span></p>
+            </div>
+            <div class="col s6">
+                <p>Requested size : <span th:text="${demand.placeSize}"></span> m</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <p>Address : <span th:text="${demand.address}"></span></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <p>From : <span th:text="${demand.startDate}"></span></p>
+            </div>
+            <div class="col s6">
+                <p>To : <span th:text="${demand.endDate}"></span></p>
+            </div>
+        </div>
+    </div>
+    <form action="#"
+          th:action="@{/employees/service/demands/{id}/validate(id=${demand.demandID})}"
           th:object="${demandUploadForm}"
           method="post">
         <div class="row">

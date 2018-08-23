@@ -50,7 +50,7 @@ public class EmployeeController {
     }
 
 
-    @PostMapping({"/demands/{id}/validate"})
+    @PostMapping({"/employees/service/demands/{id}/validate"})
     public String validate(@PathVariable("id") String demandID, @ModelAttribute DemandUpdateForm demandUpdateForm) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
@@ -58,11 +58,19 @@ public class EmployeeController {
         return "redirect:/employees/me/service/demands";
     }
 
-    @PostMapping({"/demands/{id}/refuse"})
+    @PostMapping({"/employees/service/demands/{id}/refuse"})
     public String refuse(@PathVariable("id") String demandID, @ModelAttribute DemandUpdateForm demandUpdateForm) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         userManager.refuseDemand(demandID, user.getUsername(), demandUpdateForm);
+        return "redirect:/employees/me/service/demands";
+    }
+
+    @PostMapping({"/employees/service/demands/{id}/comment"})
+    public String comment(@PathVariable("id") String demandID, @ModelAttribute DemandUpdateForm demandUpdateForm) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        userManager.commentFromEmployee(demandID, user.getUsername(), demandUpdateForm);
         return "redirect:/employees/me/service/demands";
     }
 }

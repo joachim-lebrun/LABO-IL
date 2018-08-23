@@ -3,6 +3,7 @@ package be.unamur.laboil.domain.core;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.time.LocalDate;
 
@@ -26,5 +27,13 @@ public abstract class User {
 
     public String getDisplayName() {
         return String.format("%s %s", lastName, firstName);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("firstName", firstName)
+                .append("lastName", lastName)
+                .toString();
     }
 }

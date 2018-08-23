@@ -10,6 +10,16 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
+
+<head th:fragment="appHeaders">
+    <meta charset="UTF-8"/>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{~/css/materialize.css}">
+    <!--Import Google Icon Font-->
+    <link rel="stylesheet" type="text/css" th:href="@{~/css/app.css}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
 <div th:fragment="citizenNavbar">
 
     <!-- Dropdown Structure -->
@@ -105,7 +115,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" th:src="@{~/js/materialize.min.js}"></script>
     <script type="text/javascript" th:src="@{~/js/general.js}"></script>
-
 </div>
 
 </html>

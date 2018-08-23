@@ -56,7 +56,7 @@ public class EmployeeService {
     }
 
     private Employee buildMayorFromDAO(EmployeeDAO dao) {
-        Employee employee = Employee.builder()
+        return Employee.builder()
                 .firstName(dao.getFirstName())
                 .lastName(dao.getLastName())
                 .address(dao.getAddress())
@@ -67,7 +67,6 @@ public class EmployeeService {
                 .userID(dao.getUserID())
                 .empoyeeID(dao.getEmployeeID())
                 .build();
-        return employee;
     }
 
     public Employee findByEmail(String email) {
@@ -96,7 +95,7 @@ public class EmployeeService {
         List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM EMPLOYEE e JOIN USER u on u.USER_ID=e.USER_ID");
         return rows
                 .stream()
-                .map(this::EmployeeFromRow)
+                .map(this::employeeFromRow)
                 .collect(Collectors.toList());
     }
 
@@ -104,11 +103,11 @@ public class EmployeeService {
         List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM EMPLOYEE e JOIN USER u on u.USER_ID=e.USER_ID where SERVICE_ID = ?", serviceID);
         return rows
                 .stream()
-                .map(this::EmployeeFromRow)
+                .map(this::employeeFromRow)
                 .collect(Collectors.toList());
     }
 
-    private Employee EmployeeFromRow(Map<String, Object> row) {
+    private Employee employeeFromRow(Map<String, Object> row) {
         return Employee.builder()
                 .firstName((String) row.get("FIRST_NAME"))
                 .lastName((String) row.get("LAST_NAME"))

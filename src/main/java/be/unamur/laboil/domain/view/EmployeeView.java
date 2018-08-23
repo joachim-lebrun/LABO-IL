@@ -1,14 +1,12 @@
 package be.unamur.laboil.domain.view;
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * @author Joachim Lebrun on 06-08-18
  */
-@Getter
-@Setter
+@Data
 public class EmployeeView extends UserView {
     private String service;
 

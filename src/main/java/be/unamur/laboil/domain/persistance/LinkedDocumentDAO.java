@@ -8,7 +8,7 @@ import lombok.Data;
  */
 @Data
 public class LinkedDocumentDAO {
-    private String LinkedDocumentID;
+    private String linkedDocumentID;
     private String demandID;
     private String path;
     private String name;
@@ -18,7 +18,7 @@ public class LinkedDocumentDAO {
 
     @Builder
     public LinkedDocumentDAO(String linkedDocumentID, String demandID, String path, String name) {
-        LinkedDocumentID = linkedDocumentID;
+        this.linkedDocumentID = linkedDocumentID;
         this.demandID = demandID;
         this.path = path;
         this.name = name;

@@ -2,6 +2,7 @@ package be.unamur.laboil.controller;
 
 import be.unamur.laboil.domain.view.CitizenView;
 import be.unamur.laboil.domain.view.form.DemandForm;
+import be.unamur.laboil.domain.view.form.DemandUpdateForm;
 import be.unamur.laboil.manager.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 /**
@@ -42,6 +44,7 @@ public class CitizenController {
         model.addAttribute("demands", userManager.getMyDemands(user.getUsername()));
         model.addAttribute("services", userManager.getAllServicesOfMyTown(user.getUsername()));
         model.addAttribute("demandForm", DemandForm.builder().build());
+        model.addAttribute("demandUploadForm", DemandForm.builder().build());
         return "pages/citizensDemands";
     }
 
@@ -57,5 +60,14 @@ public class CitizenController {
             model.clear();
             return "redirect:/citizens/me/demands";
         }
+    }
+
+
+    @PostMapping({"/citizens/demands/{id}/comment"})
+    public String comment(@PathVariable("id") String demandID, @ModelAttribute DemandUpdateForm demandUpdateForm) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        userManager.commentFromCitizen(demandID, user.getUsername(), demandUpdateForm);
+        return "redirect:/citizens/me/demands";
     }
 }

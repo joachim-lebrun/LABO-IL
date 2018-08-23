@@ -6,52 +6,52 @@
           method="post">
         <div class="row">
             <div class="input-field col s12 center">
-                <p class="center login-form-text">SIGN UP FORM : PLEASE ENTER YOUR DATA TO CREATE A NEW ACCOUNT</p>
+                <p class="center login-form-text" th:text="#{home.form.formTitle}">SIGN UP FORM : PLEASE ENTER YOUR DATA TO CREATE A NEW ACCOUNT</p>
             </div>
         </div>
         <div class="row">
             <div class="col s6">
                 <label th:text="#{home.form.firstName}" for="FNInput">First Name</label>
-                <input id="FNInput" type="text" th:field="*{firstName}" placeholder="First Name" required/>
+                <input id="FNInput" type="text" th:field="*{firstName}" th:placeholder="#{home.form.firstName}" placeholder="First Name" required/>
             </div>
             <div class="col s6">
                 <label th:text="#{home.form.lastName}" for="LNInput">Last Name</label>
-                <input id="LNInput" type="text" th:field="*{lastName}" placeholder="Last Name" required/>
+                <input id="LNInput" type="text" th:field="*{lastName}" th:placeholder="#{home.form.lastName}" placeholder="Last Name" required/>
             </div>
         </div>
         <div class="row">
             <div class="col s6">
                 <label th:text="#{home.form.address}" for="ADInput">Address</label>
-                <input id="ADInput" type="text" th:field="*{address}" placeholder="Address" required/>
+                <input id="ADInput" type="text" th:field="*{address}" th:placeholder="#{home.form.address}" placeholder="Address" required/>
             </div>
             <div class="col s6">
                 <label th:text="#{home.form.birthDate}" for="BDInput">Birth Date</label>
-                <input id="BDInput" type="text" th:field="*{birthDate}" placeholder="BirthDate DD/MM/YYYY" required/>
+                <input id="BDInput" type="text" th:field="*{birthDate}" th:placeholder="#{home.form.birthDateFormat}" placeholder="BirthDate DD/MM/YYYY" required/>
             </div>
         </div>
         <div class="row">
             <div class="col s6">
                 <label th:text="#{home.form.phoneNumber}" for="PNInput">Phone Number</label>
-                <input id="PNInput" type="text" th:field="*{phoneNumber}" placeholder="Phone Number"/>
+                <input id="PNInput" type="text" th:field="*{phoneNumber}" th:placeholder="#{home.form.phoneNumber}" placeholder="Phone Number"/>
             </div>
             <div class="col s6">
                 <label th:text="#{home.form.email}" for="EMInput">email address</label>
-                <input id="EMInput" type="text" th:field="*{email}" placeholder="email address" required/>
+                <input id="EMInput" type="text" th:field="*{email}" th:placeholder="#{home.form.email}" placeholder="email address" required/>
             </div>
         </div>
         <div class="row">
             <div class="col s4">
                 <label th:text="#{home.form.password}" for="PassInput">password</label>
-                <input id="PassInput" type="password" th:field="*{password}" placeholder="password" required/>
+                <input id="PassInput" type="password" th:field="*{password}" th:placeholder="#{home.form.password}" placeholder="password" required/>
             </div>
             <div class="col s4">
-                <label th:text="#{home.form.natReg}" for="RNInput">Registre Nat</label>
-                <input id="RNInput" type="text" th:field="*{natReg}" placeholder="Registre Nat" required/>
+                <label th:text="#{home.form.natReg}" for="RNInput">National register n°</label>
+                <input id="RNInput" type="text" th:field="*{natReg}" th:placeholder="#{home.form.natReg}" placeholder="Registre Nat" required/>
             </div>
 
 
             <div class="input-field col s4">
-                <select th:field="*{town}">
+                <select id="TownInput" th:field="*{town}">
                     <option value="" disabled selected th:text="#{citizen.form.town}">Select your town</option>
                     <option value="Lessines">Lessines</option>
                     <option value="Mons">Mons</option>
@@ -60,13 +60,13 @@
                     <option value="Enghien">Enghien</option>
                     <option value="Bousval">Bousval</option>
                 </select>
-                <label>Select your town</label>
+                <label for="TownInput" th:text="#{citizen.form.town}" >Select your town</label>
             </div>
         </div>
         <div class="row">
             <div>
-                <button id="signUpButton" class="btn waves-effect waves-light" type="submit" name="signup">
-                    <i class="material-icons right" th:text="#{home.form.register}">send</i>
+                <button id="signUpButton" class="btn waves-effect waves-light" type="submit" name="signup" th:text="#{home.form.register}"> Register
+
                 </button>
             </div>
 

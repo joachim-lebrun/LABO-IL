@@ -1,5 +1,4 @@
-
-$(document).ready(function(){
+$(document).ready(function () {
     $('.modal').modal();
     $('.dropdown-trigger').dropdown({
             inDuration: 300,
@@ -12,7 +11,7 @@ $(document).ready(function(){
     );
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     var elems = document.querySelectorAll('.sidenav');
     var instances = M.Sidenav.init(elems, options);
 });
@@ -23,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Or with jQuery
 
-$(document).ready(function(){
+$(document).ready(function () {
     $('.sidenav').sidenav();
 });
 
@@ -34,6 +33,21 @@ $('.carousel.carousel-slider').carousel({
     indicators: true
 });
 
-$(document).ready(function(){
-    $('.datepicker').datepicker();
+document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelectorAll('.datepicker');
+    var instances = M.Datepicker.init(elems, {
+        format: "d/mm/yyyy"
+    });
 });
+
+
+var refreshHistory = function (id) {
+    $.get("/demands/" + id + "/events", function (data, status) {
+        var html = "";
+        for (event of data) {
+            html += `<div class="row">${event.userName} (${event.time}): ${event.comment}</div>`
+        }
+        console.log(html);
+        $('#chatBlock' + id).html(html)
+    });
+};

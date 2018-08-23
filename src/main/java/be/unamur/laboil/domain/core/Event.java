@@ -2,13 +2,19 @@ package be.unamur.laboil.domain.core;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author Joachim Lebrun on 15-08-18
  */
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 public class Event implements Comparable<Event> {
 
 
@@ -17,23 +23,33 @@ public class Event implements Comparable<Event> {
     private String comment;
     private User user;
     private EventStatus status;
-    private LocalDate creationDate;
+    private LocalDateTime creationTime;
 
     public Event() {
     }
 
     @Builder
-    public Event(String eventID, Demand demand, String comment, User user, EventStatus status, LocalDate creationDate) {
+    public Event(String eventID, Demand demand, String comment, User user, EventStatus status, LocalDateTime creationTime) {
         this.eventID = eventID;
         this.demand = demand;
         this.comment = comment;
         this.user = user;
         this.status = status;
-        this.creationDate = creationDate;
+        this.creationTime = creationTime;
     }
 
     @Override
     public int compareTo(Event o) {
-        return creationDate.compareTo(o.creationDate);
+        return creationTime.compareTo(o.creationTime);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("eventID", eventID)
+                .append("comment", comment)
+                .append("status", status)
+                .append("creationTime", creationTime)
+                .toString();
     }
 }

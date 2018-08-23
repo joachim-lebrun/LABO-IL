@@ -8,6 +8,7 @@ import be.unamur.laboil.utilities.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,10 +42,14 @@ public class CitizenService {
 
 
     public Citizen findById(String userId) {
-        CitizenDAO dao = jdbcTemplate.queryForObject("SELECT c.*,u.* FROM CITIZEN c JOIN USER u on u.USER_ID=c.USER_ID where u.USER_ID = ?",
-                new Object[]{userId}, (resultSet, i) -> extractFromRS(resultSet));
+        try {
+            CitizenDAO dao = jdbcTemplate.queryForObject("SELECT c.*,u.* FROM CITIZEN c JOIN USER u on u.USER_ID=c.USER_ID where u.USER_ID = ?",
+                    new Object[]{userId}, (resultSet, i) -> extractFromRS(resultSet));
+            return buildFromDAO(dao);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
 
-        return buildFromDAO(dao);
     }
 
     private Citizen buildFromDAO(CitizenDAO dao) {

@@ -10,30 +10,18 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Builder
 public class SimpleDemandView {
 
     private String demandID;
     private String serviceName;
     private String name;
+    private String address;
+    private String startDate;
+    private String endDate;
+    private String placeSize;
     private String creatorName;
     private String verificatorName;
     private String currentStatus;
     private String createdDate;
-
-
-    public SimpleDemandView() {
-
-    }
-
-    @Builder
-
-    public SimpleDemandView(String demandID, String serviceName, String name, String creatorName, String verificatorName, String currentStatus, String createdDate) {
-        this.demandID = demandID;
-        this.serviceName = serviceName;
-        this.name = name;
-        this.creatorName = creatorName;
-        this.verificatorName = verificatorName;
-        this.currentStatus = currentStatus;
-        this.createdDate = createdDate;
-    }
 }

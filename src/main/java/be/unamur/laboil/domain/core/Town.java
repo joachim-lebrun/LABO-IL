@@ -2,16 +2,19 @@ package be.unamur.laboil.domain.core;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.File;
 
 /**
  * @author Joachim Lebrun on 06-08-18
  */
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode
 @Builder
 @AllArgsConstructor
@@ -28,4 +31,12 @@ public class Town {
     private File logo;
     private String country;
     private int postalCode;
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("townID", townID)
+                .append("name", name)
+                .toString();
+    }
 }

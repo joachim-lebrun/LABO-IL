@@ -16,21 +16,75 @@
             <td th:text="${demand.demandID}"></td>
             <td th:text="${demand.creatorName}"></td>
             <td th:text="${demand.name}"></td>
-            <td th:text="${demand.currentStatus}"></td>
             <td>
-                <div th:switch="${demand.currentStatus}" class="orange">
-                    <p th:case="'NEW'"></p>
-                    <p th:case="'PENDING'"></p>
-                    <p th:case="'ACCEPTED'"><a th:href="@{/demands/{id}/officialDocument(id=${demand.demandID})}">
-                        <i class="material-icons">
-                            download
-                        </i>
-                    </a></p>
-                    <p th:case="'REFUSED'"><a th:href="@{/demands/{id}/officialDocument(id=${demand.demandID})}">
-                        <i class="material-icons">
-                            download
-                        </i>
-                    </a></p>
+                <div th:switch="${demand.currentStatus}">
+                    <div th:case="'NEW'">
+                        <div>
+                            <i class="material-icons"> fiber_new </i>
+                        </div>
+                    </div>
+                    <div th:case="'PENDING'">
+                        <div>
+                            <i class="material-icons spin"> autorenew </i>
+                        </div>
+                    </div>
+                    <div th:case="'ACCEPTED'">
+                        <div>
+                            <i class="material-icons"> done </i>
+                        </div>
+                    </div>
+                    <div th:case="'REFUSED'">
+                        <div>
+                            <i class="material-icons"> clear </i>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div th:switch="${demand.currentStatus}">
+                    <div th:id="'commentModal'+${demand.demandID}" class="modal">
+                        <div class="modal-content">
+                            <div th:replace="fragments/form/citizenCommentDemand.html :: form"></div>
+                        </div>
+                    </div>
+                    <div th:case="'NEW'">
+                        <div>
+                            <a th:href="'#commentModal'+${demand.demandID}"
+                               th:onclick="'refreshHistory(\''+${demand.demandID}+'\')'"
+                               class="waves-effect waves-light btn btn-small modal-trigger orange">
+                                <i class="material-icons"> comment </i>
+                            </a>
+                        </div>
+                    </div>
+                    <div th:case="'PENDING'">
+                        <div>
+                            <a th:href="'#commentModal'+${demand.demandID}"
+                               th:onclick="'refreshHistory(\''+${demand.demandID}+'\')'"
+                               class="waves-effect waves-light btn btn-small modal-trigger orange">
+                                <i class="material-icons"> comment </i>
+                            </a>
+                        </div>
+                    </div>
+                    <div th:case="'ACCEPTED'">
+                        <div>
+                            <a class="waves-effect waves-light btn btn-small modal-trigger green lighten-2"
+                               th:href="@{/demands/{id}/officialDocument(id=${demand.demandID})}">
+                                <i class="material-icons">
+                                    file_download
+                                </i>
+                            </a>
+                        </div>
+                    </div>
+                    <div th:case="'REFUSED'">
+                        <div>
+                            <a class="waves-effect waves-light btn btn-small modal-trigger red lighten-2"
+                               th:href="@{/demands/{id}/officialDocument(id=${demand.demandID})}">
+                                <i class="material-icons">
+                                    file_download
+                                </i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
             </td>

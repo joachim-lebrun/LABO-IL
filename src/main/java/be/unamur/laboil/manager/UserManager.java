@@ -9,6 +9,7 @@ import be.unamur.laboil.domain.core.OfficialDocument;
 import be.unamur.laboil.domain.core.Town;
 import be.unamur.laboil.domain.core.User;
 import be.unamur.laboil.domain.view.CitizenView;
+import be.unamur.laboil.domain.view.ConversationItem;
 import be.unamur.laboil.domain.view.EmployeeView;
 import be.unamur.laboil.domain.view.ServiceView;
 import be.unamur.laboil.domain.view.SimpleDemandView;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -141,7 +143,7 @@ public class UserManager {
         return demandService
                 .getMyDemands(citizenService.findByEmail(email).getUserID())
                 .stream()
-                .map(demand -> makeSimpleDemandViewFromDemand(demand))
+                .map(this::makeSimpleDemandViewFromDemand)
                 .collect(Collectors.toList());
     }
 
@@ -152,6 +154,10 @@ public class UserManager {
         informations.put("end", demandForm.getEndDate());
         informations.put("size", demandForm.getPlaceSize());
         informations.put("address", demandForm.getAddress());
+        informations.put("expire", LocalDate
+                .parse(demandForm.getStartDate(), Constants.FORMATTER)
+                .minusDays(2)
+                .format(Constants.FORMATTER));
         Demand newDemand = Demand.builder()
                 .service(serviceService.findById(demandForm.getServiceId()))
                 .name(demandForm.getName())
@@ -176,7 +182,7 @@ public class UserManager {
         List<Demand> demands = demandService.findPendingDemandByService(employee.getService().getServiceID());
         return demands
                 .stream()
-                .map(demand -> makeSimpleDemandViewFromDemand(demand))
+                .map(this::makeSimpleDemandViewFromDemand)
                 .collect(Collectors.toList());
     }
 
@@ -186,7 +192,11 @@ public class UserManager {
                 .serviceName(demand.getService().getName())
                 .name(demand.getName())
                 .demandID(demand.getDemandID())
-                .createdDate(demand.getHistory().last().getCreationDate().format(Constants.FORMATTER))
+                .address(demand.getInformation().get("address"))
+                .startDate(demand.getInformation().get("start"))
+                .endDate(demand.getInformation().get("end"))
+                .placeSize(demand.getInformation().get("size"))
+                .createdDate(demand.getHistory().last().getCreationTime().format(Constants.FORMATTER))
                 .currentStatus(demand.getHistory().last().getStatus().name())
                 .creatorName(demand.getCreator().getDisplayName())
                 .build();
@@ -213,14 +223,13 @@ public class UserManager {
         Employee employee = employeeService.findByEmail(email);
         Map<String, String> informations = demand.getInformation();
         informations.put("amount", demandUpdateForm.getAmount());
-        informations.put("communalName", demandUpdateForm.getAmount());
         demand.setVerificator(employee);
         demand.setCommunalName(demandUpdateForm.getCommunalName());
         demand.setInformation(informations);
         Event event = new Event();
         event.setDemand(demand);
         event.setComment(demandUpdateForm.getComment());
-        event.setCreationDate(LocalDate.now());
+        event.setCreationTime(LocalDateTime.now());
         event.setStatus(EventStatus.ACCEPTED);
         event.setUser(employee);
         demandInformationService.insertAndUpdate(demandID, informations);
@@ -231,20 +240,55 @@ public class UserManager {
     public void refuseDemand(String demandID, String email, DemandUpdateForm demandUpdateForm) {
         Demand demand = demandService.findByID(demandID);
         Employee employee = employeeService.findByEmail(email);
-        Map<String, String> informations = demand.getInformation();
-        informations.put("amount", demandUpdateForm.getAmount());
-        informations.put("communalName", demandUpdateForm.getAmount());
         demand.setVerificator(employee);
         demand.setCommunalName(demandUpdateForm.getCommunalName());
-        demand.setInformation(informations);
         Event event = new Event();
         event.setDemand(demand);
         event.setComment(demandUpdateForm.getComment());
-        event.setCreationDate(LocalDate.now());
+        event.setCreationTime(LocalDateTime.now());
         event.setStatus(EventStatus.REFUSED);
         event.setUser(employee);
-        demandInformationService.insertAndUpdate(demandID, informations);
         eventService.insert(event);
         demandService.update(demand);
+    }
+
+    public void commentFromEmployee(String demandID, String email, DemandUpdateForm demandUpdateForm) {
+        Demand demand = demandService.findByID(demandID);
+        Employee employee = employeeService.findByEmail(email);
+        demand.setVerificator(employee);
+        Event event = new Event();
+        event.setDemand(demand);
+        event.setComment(demandUpdateForm.getComment());
+        event.setCreationTime(LocalDateTime.now());
+        event.setStatus(EventStatus.PENDING);
+        event.setUser(employee);
+        eventService.insert(event);
+        demandService.update(demand);
+    }
+
+    public void commentFromCitizen(String demandID, String email, DemandUpdateForm demandUpdateForm) {
+        Demand demand = demandService.findByID(demandID);
+        Citizen citizen = citizenService.findByEmail(email);
+        Event event = new Event();
+        event.setDemand(demand);
+        event.setComment(demandUpdateForm.getComment());
+        event.setCreationTime(LocalDateTime.now());
+        event.setStatus(EventStatus.PENDING);
+        event.setUser(citizen);
+        eventService.insert(event);
+        demandService.update(demand);
+    }
+
+    public List<ConversationItem> getHistoryOf(String demandID) {
+        return eventService
+                .findHistoryOf(demandID)
+                .stream()
+                .map(event -> ConversationItem.builder()
+                        .userName(event.getUser().getDisplayName())
+                        .comment(event.getComment())
+                        .time(event.getCreationTime().format(Constants.DT_FORMATTER))
+                        .isEmployee(event.getUser() instanceof Employee)
+                        .build())
+                .collect(Collectors.toList());
     }
 }

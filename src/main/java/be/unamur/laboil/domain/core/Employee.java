@@ -3,13 +3,18 @@ package be.unamur.laboil.domain.core;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.time.LocalDate;
 
 /**
  * @author Joachim Lebrun on 06-08-18
  */
-@Data
+
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 public class Employee extends User {
 
@@ -21,6 +26,13 @@ public class Employee extends User {
         super(userID, firstName, lastName, address, phoneNumber, birthDate, email, password, enabled, natReg);
         this.service = service;
         this.empoyeeID = empoyeeID;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("empoyeeID", empoyeeID)
+                .toString();
     }
 }
 

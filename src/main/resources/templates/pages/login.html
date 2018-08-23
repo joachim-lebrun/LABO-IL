@@ -32,32 +32,31 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s12 center">
-                            <p class="center login-form-text">PLEASE ENTER YOUR CREDENTIALS</p>
+                            <p class="center login-form-text" th:text="#{home.login.title}">PLEASE ENTER YOUR CREDENTIALS</p>
                         </div>
                     </div>
                     <div class="row margin">
                         <div class="input-field col s12">
-                            <input id="username" name="username" th:type="text">
-                            <label for="username" class="center-align">Username</label>
+                            <input id="username" name="username" th:type="text" th:placeholder="#{home.login.userEmail}" placeholder="enter your email address here">
+                            <label for="username" class="center-align" th:text="#{home.login.userName}">Username</label>
                         </div>
                     </div>
                     <div class="row margin">
                         <div class="input-field col s12">
                             <input id="password" name="password" th:type="password">
-                            <label for="password">Password</label>
+                            <label for="password" th:text="#{home.login.password}">Password</label>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="input-field col s12">
-                            <button class="btn waves-effect waves-light col s12" type="submit" name="login">
-                                <i class="material-icons right" th:text="#{login.button}">Login</i>
+                            <button class="btn waves-effect waves-light col s12" type="submit" name="login" th:text="#{login.button}"> Log in
                             </button>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col s6 m6 l6">
-                            <p class="margin medium-small"><a th:href="@{/signup}">Register Now!</a></p>
+                            <p class="margin medium-small"><a th:href="@{/signup}" th:text="#{login.redirect.signup}">Register Now!</a></p>
                         </div>
                         <!--<div class="col s6 m6 l6">
                             <p class="margin right-align medium-small"><a th:href="@{/forgot}">Forgot

@@ -38,7 +38,7 @@ public class PDFGeneratorService {
     @Value("${laboil.storage.path}")
     private String storageDirectory;
     private final String newSeparatorToken = System.getProperty("line.separator");
-    private final String fileSeparator = File.separator;
+    private static final String fileSeparator = File.separator;
 
 
     public OfficialDocument createPDF(Demand demand) throws IOException {
@@ -56,6 +56,8 @@ public class PDFGeneratorService {
                     break;
                 case REFUSED:
                     addRefusedPage(document, demand);
+                    break;
+                default:
                     break;
             }
 
@@ -97,6 +99,7 @@ public class PDFGeneratorService {
                 .add(new Paragraph().add(String.format("Veuillez effectuer le versement pour le %s compris. Si ce n’est pas fait, la carte de stationnement sera invalidée dès le lendemain de l’échéance.", demand.getInformation().get("expire"))))
                 .add(whiteLine())
                 .add(whiteLine());
+        addFooter(document, demand);
     }
 
     private void addRefusedPage(Document document, Demand demand) throws MalformedURLException {
@@ -172,6 +175,7 @@ public class PDFGeneratorService {
                 .add(whiteLine())
                 .add(whiteLine())
                 .add(new Table(2)
+                        .useAllAvailableWidth()
                         .addCell(
                                 getCell(
                                         String.format("%s%sBourgmestre de la commune de %s",
@@ -179,7 +183,7 @@ public class PDFGeneratorService {
                                                 newSeparatorToken,
                                                 demand.getService().getTown().getName()),
                                         TextAlignment.LEFT)
-                                        .setMarginRight(50))
+                                        .setPaddingRight(50))
                         .addCell(
                                 getCell(
                                         String.format("%s%sService %s",
