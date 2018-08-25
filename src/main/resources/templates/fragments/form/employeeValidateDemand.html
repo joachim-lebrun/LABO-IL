@@ -5,23 +5,44 @@
     <div th:id="'detailContainer'+${demand.demandID}">
         <div class="row">
             <div class="col s6">
-                <p>User reference Name : <span th:text="${demand.name}"></span></p>
+                <p><span th:text="#{details.demands.reference}"></span><span th:text="${demand.name}"></span></p>
             </div>
             <div class="col s6">
-                <p>Requested size : <span th:text="${demand.placeSize}"></span> m</p>
+                <p><span th:text="#{details.demands.service}"></span><span th:text="${demand.serviceName}"></span></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <p><span th:text="#{details.demands.creator}"></span><span th:text="${demand.creatorName}"></span></p>
+            </div>
+            <div class="col s6">
+                <p><span th:text="#{details.demands.placeSize}"></span><span th:text="${demand.placeSize}"></span> </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <p><span th:text="#{details.demands.status}"></span><span th:text="${demand.currentStatus}"></span></p>
+            </div>
+            <div class="col s6">
+                <p><span th:text="#{details.demands.creationDate}"></span><span th:text="${demand.createdDate}"></span></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <p><span th:text="#{details.demands.verificator}"></span><span th:text="${demand.verificatorName}"></span></p>
             </div>
         </div>
         <div class="row">
             <div class="col s12">
-                <p>Address : <span th:text="${demand.address}"></span></p>
+                <p><span th:text="#{details.demands.address}"></span><span th:text="${demand.address}"></span></p>
             </div>
         </div>
         <div class="row">
             <div class="col s6">
-                <p>From : <span th:text="${demand.startDate}"></span></p>
+                <p><span th:text="#{details.demands.startDate}"></span><span th:text="${demand.startDate}"></span></p>
             </div>
             <div class="col s6">
-                <p>To : <span th:text="${demand.endDate}"></span></p>
+                <p><span th:text="#{details.demands.endDate}"></span><span th:text="${demand.endDate}"></span></p>
             </div>
         </div>
     </div>
@@ -37,25 +58,25 @@
         <div class="row">
             <div class="col s6">
                 <label th:text="#{demand.form.name}" for="FNInput">Your reference</label>
-                <input id="FNInput" type="text" th:field="*{communalName}" placeholder="Reference Name" required/>
+                <input id="FNInput" type="text" th:field="*{communalName}" th:placeholder="#{demand.form.name}" placeholder="Reference Name" required/>
             </div>
             <div class="col s6">
                 <label th:text="#{demand.form.amount}" for="AMInput">The amount</label>
-                <input id="AMInput" type="number" th:field="*{amount}" placeholder="amount to pay" required/>
+                <input id="AMInput" type="number" th:field="*{amount}" th:placeholder="#{demand.form.amountToPay}" placeholder="amount to pay" required/>
             </div>
         </div>
         <div class="row">
             <div class="col s12">
                 <div class="input-field col s12">
-                    <textarea id="COMInput" th:field="*{comment}" class="materialize-textarea" required></textarea>
+                    <textarea id="COMInput" th:field="*{comment}" th:placeholder="#{demand.form.insertComment}" class="materialize-textarea" required></textarea>
                     <label th:text="#{demand.form.comment}" for="COMInput">Comment</label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div>
-                <button id="signUpButton" class="btn waves-effect waves-light" type="submit" name="signup">
-                    <i class="material-icons right" th:text="#{demand.form.submit}">send</i>
+                <button id="signUpButton" class="btn waves-effect waves-light" type="submit" th:text="#{demand.form.submit}">
+                    <i class="material-icons right">send</i>
                 </button>
             </div>
         </div>

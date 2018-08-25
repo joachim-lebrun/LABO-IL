@@ -4,7 +4,7 @@
     <table class="striped">
         <thead>
         <tr>
-            <th th:text="#{table.demands.id}">First Name</th>
+            <th th:text="#{table.demands.date}">First Name</th>
             <th th:text="#{table.demands.creator.name}">Last Name</th>
             <th th:text="#{table.demands.title}">Title</th>
             <th th:text="#{table.demands.state}">State</th>
@@ -13,7 +13,7 @@
         </thead>
         <tbody>
         <tr th:each="demand : ${demands}">
-            <td th:text="${demand.demandID}"></td>
+            <td th:text="${demand.createdDate}"></td>
             <td th:text="${demand.creatorName}"></td>
             <td th:text="${demand.name}"></td>
             <td><span th:text="${demand.currentStatus}"></span><span th:if="${demand.unreadAmount} >0" class="new badge orange" th:text="${demand.unreadAmount}" data-badge-caption=""></span></td>

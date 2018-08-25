@@ -43,24 +43,17 @@ header, body, footer {
         padding-left: 0;
     }
 }
-.nav-wrapper {
 
-    background-color: #5a5a5a;
-}
 
 body {
 
     background-color: #e6e6e6;
 }
 
-.sidenav {
-
-    background-color: #7d7d7d;
-}
 
 #logoSideNav {
 
-    width:50%;
+    width:60%;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -70,4 +63,11 @@ body {
 #logoSideNavDiv {
 
     margin-bottom: 15%;
+}
+
+#sideNavTitle {
+
+    font-weight : bold;
+    text-align: center;
+
 }

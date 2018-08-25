@@ -5,23 +5,44 @@
     <div th:id="'detailContainer'+${demand.demandID}">
         <div class="row">
             <div class="col s6">
-                <p>User referance Name : <span th:text="${demand.name}"></span></p>
+                <p><span th:text="#{details.demands.reference}"></span><span th:text="${demand.name}"></span></p>
             </div>
             <div class="col s6">
-                <p>Requested size : <span th:text="${demand.placeSize}"></span> m</p>
+                <p><span th:text="#{details.demands.service}"></span><span th:text="${demand.serviceName}"></span></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <p><span th:text="#{details.demands.creator}"></span><span th:text="${demand.creatorName}"></span></p>
+            </div>
+            <div class="col s6">
+                <p><span th:text="#{details.demands.placeSize}"></span><span th:text="${demand.placeSize}"></span> </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <p><span th:text="#{details.demands.status}"></span><span th:text="${demand.currentStatus}"></span></p>
+            </div>
+            <div class="col s6">
+                <p><span th:text="#{details.demands.creationDate}"></span><span th:text="${demand.createdDate}"></span></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <p><span th:text="#{details.demands.verificator}"></span><span th:text="${demand.verificatorName}"></span></p>
             </div>
         </div>
         <div class="row">
             <div class="col s12">
-                <p>Address : <span th:text="${demand.address}"></span></p>
+                <p><span th:text="#{details.demands.address}"></span><span th:text="${demand.address}"></span></p>
             </div>
         </div>
         <div class="row">
             <div class="col s6">
-                <p>From : <span th:text="${demand.startDate}"></span></p>
+                <p><span th:text="#{details.demands.startDate}"></span><span th:text="${demand.startDate}"></span></p>
             </div>
             <div class="col s6">
-                <p>To : <span th:text="${demand.endDate}"></span></p>
+                <p><span th:text="#{details.demands.endDate}"></span><span th:text="${demand.endDate}"></span></p>
             </div>
         </div>
     </div>

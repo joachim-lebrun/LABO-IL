@@ -4,10 +4,13 @@
 
 <body>
 <nav th:replace="fragments/general.html :: employeeNavbar"></nav>
-<h1>Service Dashboard</h1>
+<div class="container">
+
+<h1 th:text="#{table.demands.demandsToValidate}">Service Dashboard</h1>
 
 <div class="row">
     <div th:replace="fragments/table/demandsValidationTable.html :: table"></div>
+</div>
 </div>
 
 <span th:replace="fragments/general.html :: scripts"/>

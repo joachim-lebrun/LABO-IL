@@ -24,33 +24,35 @@
 
     <!-- Dropdown Structure -->
     <ul id="dropdown1" class="dropdown-content">
-        <li><a href="?lang=fr">French</a></li>
+        <li><a href="?lang=fr" th:text="#{nav.citizen.fr}">French</a></li>
         <li class="divider"></li>
-        <li><a href="?lang=en_US">English</a></li>
+        <li><a href="?lang=en_US" th:text="#{nav.citizen.en}">English</a></li>
     </ul>
     <nav>
-        <div class="nav-wrapper">
+        <div class="nav-wrapper grey darken-1">
             <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-                <li><a class="orange-text" th:href="@{/login}">Login</a></li>
-                <li><a class="orange-text" th:href="@{/signup}">Sign up</a></li>
                 <!-- Dropdown Trigger -->
-                <li><a class="dropdown-trigger orange-text" href="#!" data-target="dropdown1">Language<i
+                <li><a class="dropdown-trigger orange-text" href="#!" data-target="dropdown1"><span th:text="#{nav.citizen.lang}"></span><i
                         class="material-icons right">arrow_drop_down</i></a></li>
             </ul>
         </div>
     </nav>
-    <ul id="slide-out" class="sidenav sidenav-fixed">
+    <ul id="slide-out" class="sidenav sidenav-fixed grey darken-2">
         <li>
             <div id="logoSideNavDiv">
-                <img id="logoSideNav" th:src="@{~/img/logoLaboilOrangeWriting.png}"/>
+                <img id="logoSideNav" th:src="@{~/img/LogoOnly.png}"/>
+                <h3 class="orange-text text-darken-3" id="sideNavTitle">LABOIL</h3>
             </div>
 
         </li>
-        <li><a th:href="@{/citizens/me}" class="waves-effect orange-text">My Profile</a></li>
-        <li><a th:href="@{/citizens/me/documents}" class="waves-effect orange-text">My Official Documents</a></li>
-        <li><a th:href="@{/citizens/me/demands}" class="waves-effect orange-text">My Demands</a></li>
-        <li><a th:href="@{/logout}" class="waves-effect orange-text">Logout</a></li>
+        <li><div class="divider orange darken-3"></div></li>
+        <li><a th:href="@{/citizens/me}" class="waves-effect"><span class="orange-text text-darken-3" th:text="#{nav.citizen.profile}"></span><i class="material-icons left orange-text text-darken-3">person</i></a></li>
+        <li><div class="divider orange darken-3"></div></li>
+        <li><a th:href="@{/citizens/me/demands}" class="waves-effect"><span class="orange-text text-darken-3" th:text="#{nav.citizen.demands}"></span><i class="material-icons left orange-text text-darken-3">assignment</i></a></li>
+        <li><div class="divider orange darken-3"></div></li>
+        <li><a th:href="@{/logout}" class="waves-effect"><span class="orange-text text-darken-3" th:text="#{nav.citizen.logout}"></span><i class="material-icons left orange-text text-darken-3">power_settings_new</i></a></li>
+        <li><div class="divider orange darken-3"></div></li>
     </ul>
 
 </div>
@@ -59,33 +61,35 @@
 
     <!-- Dropdown Structure -->
     <ul id="dropdown1" class="dropdown-content">
-        <li><a href="?lang=fr">French</a></li>
+        <li><a href="?lang=fr" th:text="#{nav.employee.fr}">French</a></li>
         <li class="divider"></li>
-        <li><a href="?lang=en_US">English</a></li>
+        <li><a href="?lang=en_US" th:text="#{nav.employee.en}">English</a></li>
     </ul>
     <nav>
-        <div class="nav-wrapper">
+        <div class="nav-wrapper grey darken-1">
             <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-                <li><a class="orange-text" th:href="@{/login}">Login</a></li>
-                <li><a class="orange-text" th:href="@{/signup}">Sign up</a></li>
                 <!-- Dropdown Trigger -->
-                <li><a class="dropdown-trigger orange-text" href="#!" data-target="dropdown1">Language<i
+                <li><a class="dropdown-trigger orange-text" href="#!" data-target="dropdown1"><span th:text="#{nav.employee.lang}"></span><i
                         class="material-icons right">arrow_drop_down</i></a></li>
             </ul>
         </div>
     </nav>
-    <ul id="slide-out" class="sidenav sidenav-fixed">
+    <ul id="slide-out" class="sidenav sidenav-fixed grey darken-2">
         <li>
             <div id="logoSideNavDiv">
-                <img id="logoSideNav" th:src="@{~/img/logoLaboilOrangeWriting.png}"/>
+                <img id="logoSideNav" th:src="@{~/img/LogoOnly.png}"/>
+                <h3 class="orange-text text-darken-3" id="sideNavTitle">LABOIL</h3>
             </div>
 
         </li>
-        <li><a th:href="@{/employees/me}" class="waves-effect orange-text">My Profile</a></li>
-        <li><a th:href="@{/employees/me/documents}" class="waves-effect orange-text">My Official Documents</a></li>
-        <li><a th:href="@{/employees/me/demands}" class="waves-effect orange-text">My Demands</a></li>
-        <li><a th:href="@{/logout}" class="waves-effect orange-text">Logout</a></li>
+        <li><div class="divider orange darken-3"></div></li>
+        <li><a th:href="@{/employees/me}" class="waves-effect"><span class="orange-text text-darken-3" th:text="#{nav.employee.profile}"></span><i class="material-icons left orange-text text-darken-3">person</i></a></li>
+        <li><div class="divider orange darken-3"></div></li>
+        <li><a th:href="@{/employees/me/service/demands}" class="waves-effect"><span class="orange-text text-darken-3" th:text="#{nav.employee.demands}"></span><i class="material-icons left orange-text text-darken-3">assignment</i></a></li>
+        <li><div class="divider orange darken-3"></div></li>
+        <li><a th:href="@{/logout}" class="waves-effect"><span class="orange-text text-darken-3" th:text="#{nav.employee.logout}"></span><i class="material-icons left orange-text text-darken-3">power_settings_new</i></a></li>
+        <li><div class="divider orange darken-3"></div></li>
     </ul>
 
 </div>
@@ -93,19 +97,19 @@
 
     <!-- Dropdown Structure -->
     <ul id="dropdown2" class="dropdown-content">
-        <li><a href="?lang=fr">French</a></li>
+        <li><a href="?lang=fr" th:text="#{nav.home.fr}">French</a></li>
         <li class="divider"></li>
-        <li><a href="?lang=en_US">English</a></li>
+        <li><a href="?lang=en_US" th:text="#{nav.home.en}">English</a></li>
     </ul>
     <nav>
         <div class="nav-wrapper">
             <a href="../pages/index.html" th:href="@{/}" class="brand-logo">
                 <img id="logoNavBar" th:src="@{~/img/LogoOnly.png}"/></a>
             <ul class="right hide-on-med-and-down">
-                <li><a class="orange-text" th:href="@{/login}">Login</a></li>
-                <li><a class="orange-text" th:href="@{/signup}">Sign up</a></li>
+                <li><a class="orange-text" th:href="@{/login}" th:text="#{nav.home.login}">Login</a></li>
+                <li><a class="orange-text" th:href="@{/signup}" th:text="#{nav.home.signup}">Sign up</a></li>
                 <!-- Dropdown Trigger -->
-                <li><a class="dropdown-trigger orange-text" href="#!" data-target="dropdown2">Language<i
+                <li><a class="dropdown-trigger orange-text" href="#!" data-target="dropdown2"><span th:text="#{nav.home.lang}"></span><i
                         class="material-icons right">arrow_drop_down</i></a></li>
             </ul>
         </div>
